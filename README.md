@@ -54,3 +54,4 @@ Instructors Note<sup>**5**</sup>
 - [VisualStudio Code Editor](https://code.visualstudio.com/)
 - [MAMP](https://www.mamp.info/en/)
 - [XAMP](https://www.apachefriends.org/index.html)
+- [lab](http://labs.phaser.io/edit.html?src=src/games/firstgame/part1.js)
