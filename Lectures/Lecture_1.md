@@ -1,9 +1,9 @@
 ## Game Basics
 
 - **2D graphics**
-Graphic rendering technique in a two-dimensional perspective, often using sprites.
+  - Graphic rendering technique in a two-dimensional perspective, often using sprites.
 - **2.5D or Psuedo 3D**
-This perspective is typcially a 2D graphical projection used to cause images or scenes to simulate the appearance of being three-dimensional (3D).
+  - This perspective is typcially a 2D graphical projection used to cause images or scenes to simulate the appearance of being three-dimensional (3D).
 - **Sprite**
   - Use of the term sprite has expanded to refer to any two-dimensional bitmap used as part of a graphics display, even if drawn into a frame buffer (by either software or a GPU) instead of being composited on-the-fly at display time.
   - The act of creating sprites is a form of pixel art. It is sometimes referred to as spriting, especially in the hobbyist community.
