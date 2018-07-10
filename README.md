@@ -2,7 +2,7 @@
 Introduction to 2D gaming using a javascript framework
 
 
-- Days: TR 1430 - 1530
+- Days: TR 1430 - 1630
 - Location: BO 109 
 - Dates: Jul 9 - Aug 9
 - Last Day for “W”: Jul 26th
