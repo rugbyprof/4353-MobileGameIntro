@@ -3,7 +3,7 @@
 <head> 
 	<meta charset="UTF-8" />
     <title>Phaser - Making your first game, part 10</title>
-    <script src="../phaser.min.js"></script>
+    <script src="assets/phaser.min.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -20,7 +20,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 500 },
             debug: false
         }
     },
@@ -70,6 +70,8 @@ function create ()
 
     // The player and its settings
     player = this.physics.add.sprite(100, 450, 'dude');
+
+    player.body.setSize(player.width-20, player.height);
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.setBounce(0.2);

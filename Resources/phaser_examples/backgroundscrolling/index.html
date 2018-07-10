@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Phaser Background Scroll</title>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<script src="js/phaser.js"></script>
+<script src="js/boot.js"></script>
+<script src="js/preloader.js"></script>
+<script src="js/level1.js"></script>
+<meta name="viewport" content="initial-scale=1">
+</head>
+<body>
+<script type="text/javascript">
+    window.onload = function() {
+        var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, ""); 
+        game.state.add("Boot", Game.Boot); 
+        // loading screen
+        game.state.add("Preloader", Game.Preloader);  
+        game.state.add("Level1", Game.Level1); 
+        game.state.start("Boot"); 
+    }; 
+</script>
+</body>
+</html>
