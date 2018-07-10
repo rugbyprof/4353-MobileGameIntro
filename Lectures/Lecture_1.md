@@ -1,4 +1,4 @@
-## Game Basics
+## Terminology
 
 - **2D graphics**
   - Graphic rendering technique in a two-dimensional perspective, often using sprites.
