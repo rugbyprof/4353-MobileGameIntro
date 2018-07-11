@@ -32,7 +32,7 @@ Roster #11<br>
             
 
 ### Starter Code
-The starter code is available [here](./02_first_game_v2.zip)
+The starter code is available [here](./first_game_starter.zip)
 
 
 Using the starter code provided above, program the following additions:
