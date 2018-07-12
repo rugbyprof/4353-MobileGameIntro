@@ -262,7 +262,7 @@ update: function () {
 }
 ```
 
-[Loading Spinner]('./state-manager/03 - loadUpdate/index.html')
+[Loading Spinner](./state-manager/03 - loadUpdate/index.html)
 
 
 >In JavaScript `this` always refers to the “owner” of the function we're executing, or rather, to the object that a function is a method of.
