@@ -5,7 +5,7 @@
 ### Guidelines
 - Projects that are not on github, will not be graded. 
 - Projects that do not run, will not be graded.
-- You can work in groups of 2-3 not 4. Don't ask.
+- You can work in groups of 1-2. Don't ask.
 - All work is expected to be done solely by the individuals in the group. Any collaboration with other groups will result in a grade of 0 (zero) on the assignment.
 - Each project will also contain a references file called `references.md` in which all websites in which your group obtianed example code from will be listed in a numbered list.
 - Your program will be commented, and again, any help obtained should be cited in the comments.
@@ -32,7 +32,7 @@ Roster #11<br>
             
 
 ### Starter Code
-The starter code is available [here](./02_first_game_v2.zip)
+The starter code is available [here](./first_game_starter.zip)
 
 
 Using the starter code provided above, program the following additions:

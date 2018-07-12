@@ -1,57 +1,184 @@
-var game = new Phaser.Game(800, 768, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1200, 768, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, init:init,update: update });
 
 var runner;
 var gamer;
 var background;
+var birds = [];
+var birdCount = -1;
+var runners = [];
+var boosts = [];
+var winner = false;
+var runSlow = false;
+var time = 0;
+var flying_bird = false;
+
+var phaserKeys;
+
+var finish_line_x;
+var finish_line;
+
+//https://albert-gonzalez.github.io/easytimer.js/
+var timer = new Timer();
 
 function preload() {
-
-    game.load.spritesheet('runner', 'assets/runner.png', 108, 140);
     game.load.spritesheet('game_player', 'assets/players2.png', 64, 110);
-    game.load.spritesheet('cloud', 'assets/clouds.png', 240,240);
-    game.load.image("background", "assets/road.png");
-    
+    game.load.image("background", "assets/road2.png");
+    game.load.image("finish_line", "assets/finish_line.png");
+    game.load.image("boost", "assets/boost_icon.png");
+    game.load.spritesheet('bird','assets/bird-sprite-reverse.png',200,162);
+}
 
+
+function init() {
+	// Listen to space & enter keys
+	var keys = [Phaser.KeyCode.SPACEBAR, Phaser.KeyCode.ENTER];
+	// Create Phaser.Key objects for listening to the state
+	phaserKeys = game.input.keyboard.addKeys(keys);
+	// Capture these keys to stop the browser from receiving this event
+	game.input.keyboard.addKeyCapture(keys);
 }
 
 function create() {
 
     background = game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, "background");
-    runner = game.add.sprite(100, 300, 'runner');
-    game_player = game.add.sprite(100, 200, 'game_player');
-    
-    cloud = game.add.sprite(0, 0, 'cloud');
-    cloud.visible = false;
 
-    //  Here we add a new animation called 'walk'
-    //  Because we didn't give any other parameters it's going to make an animation from all available frames in the 'hero' sprite sheet
-    runner.animations.add('running',[0,1,2,3,4,5,6,7]);
-    game_player.animations.add('game_run',[0,1,2,3,4,5,6]);
     
 
-    //  Play the animation: play('name of animation',FPS,loop=true/false)
-    runner.animations.play('running', 20, true);
-    game_player.animations.play('game_run', 20, true);
+    finish_line_x = window.innerWidth;
 
-    game.input.onDown.add(changePlayer, this);
+    //start timer obtained from easytimer.js
+    timer.start({precision: 'secondTenths'});
+    // Add AFTER background, or time will be hidden
+    timeText = game.add.text(16, 16, "00:00:00", { fontSize: '32px', fill: '#000' });
 
-    var player = prompt("Please enter your name", "name");
+    for(var i=0;i<5;i++){
+        runners.push(game.add.sprite(100, i*110+110, 'game_player'));
+        game.physics.enable(runners[i], Phaser.Physics.ARCADE);
+        runners[i].scale.setTo(.6+i/10, .6+i/10);
+
+        boosts.push(game.add.sprite(25, i*110+110+50, 'boost'));
+        boosts[i].scale.setTo(.3, .3);
+        boosts[i].tint = Math.random() * 0xffffff;
+
+        runners[i].animations.add('run_fast',[0+14*i,1+14*i,2+14*i,3+14*i,4+14*i,5+14*i,6+14*i]);
+        runners[i].animations.add('run_slow',[0+14*i,1+14*i,2+14*i,3+14*i,4+14*i,5+14*i,6+14*i]);
+        runners[i].animations.add('winner',[10+14*i,11+14*i,12+14*i]);
+        runners[i].animations.play('run_fast', 20, true);
+    }
+
+    //game.input.onDown.add(changePlayer, this);
+
+    gameTimer();
 }
 
-
-function changePlayer() {
-    cloud.visible = true;
-    cloud.animations.add('lightning',[0,1,2,3,4,5,6,7,8,9,10,0])
-    game_player.animations.add('game_run',[14,15,16,17,18,19,20]);
-    game_player.animations.play('game_run', 20, true);
-    cloud.x = game.input.x-120;
-    cloud.y = game.input.y;
-    cloud.animations.play('lightning', 20, false,false);
-    
-
-}
 
 function update(){
-    background.tilePosition.x -= 4;
+    if(!runSlow){
+        background.tilePosition.x -= 5;
+    }else{
+        if(!winner){
+            background.tilePosition.x-=2;
+            finish_line.x-=2;
+            for(var i=0;i<runners.length;i++){
+                game.physics.arcade.overlap(runners[i], finish_line, collisionHandler, null, this);
+            }
+        }
+    }
+    for(var i=0;i<runners.length;i++){
+        let r = Math.floor(Math.random() * 100);     // returns a random integer from 0 to 99
+
+        if(!runSlow){
+            if(r % 2 == 0){
+                runners[i].x += 3;
+            }else{
+                runners[i].x -= 1;
+            }
+        }else{
+            if(r % 2 == 0){
+                runners[i].x += 3;
+            }else{
+                runners[i].x += 1;
+            }            
+        }
+    }
+    if(!runSlow){
+        checkRunSlowMo();
+    }
+    if(!winner){
+        updateClock();
+    }
+
+	for (var index in phaserKeys) {
+		// Save a reference to the current key
+		var key = phaserKeys[index];
+		// If the key was just pressed, fire a laser
+		if (key.justDown) {
+			fireBird();
+		}
+	}
+    if(birds.length > 0){
+        for(var i=0;i<birds.length;i++){
+            birds[i].x -= 5;
+        }
+    }
+}
+
+function fireBird(){
+    console.log("fire bird!!");
+    birds.push(game.add.sprite(1200, game.rnd.frac() * window.innerHeight, 'bird'));
+    birdCount++;
+    birds[birdCount].scale.setTo(.3, .3);
+    birds[birdCount].animations.add('fly',[0,1,2,3,4]);
+    birds[birdCount].animations.play('fly',20,true);
+}
+
+function collisionHandler(obj){
+    console.log(obj);
+
+    if(winner === false){
+        winner = true;
+        obj.animations.play('winner', 10, true);
+    }
+
+}
+
+function updateClock(){
+    timeText.setText(timer.getTimeValues().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
+}
+
+function checkRunSlowMo(){
+    for(var i=0;i<runners.length;i++){
+        if(runners[i].x > 600){
+            runSlow = true;
+        }
+    }
+    if(runSlow){
+        for(var i=0;i<runners.length;i++){
+            runners[i].animations.play('run_slow', 5, true);
+        }
+        finish_line = game.add.sprite(1200,100 , 'finish_line')
+        game.physics.enable(finish_line, Phaser.Physics.ARCADE);
+    }
+}
+
+//example game timer (not used)
+//outputs: mm:ss (no tenths of a second)
+function gameTimer() {
+    time += 1;
+
+    m = Math.floor(time / 60);
+
+    if(m > 0){
+        time -= m * 60;
+    }
+
+    s = time;
+
+    timeText.setText(padTime(m)+":"+padTime(s));
+    var t = setTimeout(gameTimer, 1000);
+}
+function padTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
 }
 
