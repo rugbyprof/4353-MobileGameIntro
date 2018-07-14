@@ -1,4 +1,4 @@
-
+#### Compiled from: https://phaser.io/interphase
 
 ## What is a State?
 
@@ -173,6 +173,8 @@ MyGame.StateB.prototype = {
 };
 ```
 
+[Example Params](http://cs.mwsu.edu/~griffin/state-manager/02%20-%20init/)
+
 ### Passing multiple parameters
 You can pass as many parameters as you like to the init method. 
 
@@ -249,7 +251,7 @@ start: function () {
 
 
 
-### loadUpdate
+#### loadUpdate
 
 - Called right before `update` to ensure things are loaded (if it's defined).
 - If we had to worry about items being loaded, then a lot of our code would look like:
@@ -262,7 +264,41 @@ update: function () {
 }
 ```
 
-[Loading Spinner](./state-manager/03 - loadUpdate/index.html)
+[Loading Spinner](http://cs.mwsu.edu/~griffin/state-manager/03%20-%20loadUpdate/)
 
+
+
+### update
+
+- The update method is called automatically, once per logic update by the core Phaser Game loop (~60 per sec).
+- Phaser will only start calling update once the create method has been run, if it exists.
+- As the update method is called so often, at such a high frequency, you should be very careful about what gets placed inside of it. Typical examples of actions that take place inside update are things like checking for physics collision, or responding to input pointer movements.
+
+If you look at the Phaser.Game.updateLogic method you’ll notice this code:
+```js
+this.scale.preUpdate();
+this.debug.preUpdate();
+this.world.camera.preUpdate();
+this.physics.preUpdate();
+this.state.preUpdate(timeStep);
+this.plugins.preUpdate(timeStep);
+this.stage.preUpdate();
+
+this.state.update();
+this.stage.update();
+this.tweens.update(timeStep);
+this.sound.update();
+this.input.update();
+this.physics.update();
+this.particles.update();
+this.plugins.update();
+
+this.stage.postUpdate();
+this.plugins.postUpdate();
+
+#### stage.preUpdate
+
+- All display objects are connected to the stage.
+- preUpdate iterates through all object
 
 >In JavaScript `this` always refers to the “owner” of the function we're executing, or rather, to the object that a function is a method of.
