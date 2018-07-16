@@ -6,7 +6,7 @@ var OPENING = 200;
 
 var state = {
     preload: function() {
-        this.load.spritesheet("player",'http://games.jessefreeman.com/wp-content/public/workshop/phaser/assets/player.png', 48, 48);
+        this.load.spritesheet("player",'./assets/player.png', 48, 48);
         this.load.image("background", "http://fc03.deviantart.net/fs46/f/2009/174/a/3/Mario_Clouds_Desktop_by_sadistmoi.jpg");
         this.load.audio("flap", "http://games.jessefreeman.com/wp-content/public/workshop/phaser/assets/jet.wav");
         this.load.audio("score", "http://games.jessefreeman.com/wp-content/public/workshop/phaser/assets/score.wav");
