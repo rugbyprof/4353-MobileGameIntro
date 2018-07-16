@@ -11,14 +11,14 @@ var game = new Phaser.Game(1200, 768, Phaser.CANVAS, 'phaser-example', {
     update: update
 });
 
-var background;             // background image
-var birds = [];             // array of bird projectiles
-var runners = [];           // array of running men
-var winner = false;         // boolean has someone won
-var runSlow = false;        // boolean go to slow motion
-var time = 0;               // int time    
-var phaserKeys;             // array of keys to minitor
-var finish_line;            // finish line image
+var background; // background image
+var birds = []; // array of bird projectiles
+var runners = []; // array of running men
+var winner = false; // boolean has someone won
+var runSlow = false; // boolean go to slow motion
+var time = 0; // int time    
+var phaserKeys; // array of keys to minitor
+var finish_line; // finish line image
 
 //https://albert-gonzalez.github.io/easytimer.js/
 var timer = new Timer();
@@ -47,7 +47,7 @@ function init() {
     // Capture these keys to stop the browser from receiving this event
     game.input.keyboard.addKeyCapture(keys);
 }
- 
+
 /**
  * function create:  
  * 
@@ -62,7 +62,7 @@ function create() {
     timer.start({
         precision: 'secondTenths'
     });
-    
+
     // Add AFTER background, or time will be hidden!
     timeText = game.add.text(16, 16, "00:00:00", {
         fontSize: '32px',
@@ -126,7 +126,7 @@ function update() {
             } else {
                 runners[i].x -= 1;
             }
-        // if running in slow motion, don't move x in a negative fashion. Looks better
+            // if running in slow motion, don't move x in a negative fashion. Looks better
         } else {
             if (r % 2 == 0) {
                 runners[i].x += 1;
@@ -169,8 +169,8 @@ function update() {
 /**
  * 
  */
-function checkBirdStrike(id){
-    for(var i=0;i<birds.length;i++){
+function checkBirdStrike(id) {
+    for (var i = 0; i < birds.length; i++) {
         game.physics.arcade.overlap(runners[id], birds[i], birdCollisionHandler, null, this);
     }
 }
@@ -182,10 +182,10 @@ function fireBird() {
     console.log("fire bird!!");
 
     birds.push(game.add.sprite(1200, game.rnd.frac() * window.innerHeight, 'bird'));
-    game.physics.enable(birds[birds.length-1], Phaser.Physics.ARCADE);
-    birds[birds.length-1].scale.setTo(.3, .3);
-    birds[birds.length-1].animations.add('fly', [0, 1, 2, 3, 4]);
-    birds[birds.length-1].animations.play('fly', 20, true);
+    game.physics.enable(birds[birds.length - 1], Phaser.Physics.ARCADE);
+    birds[birds.length - 1].scale.setTo(.3, .3);
+    birds[birds.length - 1].animations.add('fly', [0, 1, 2, 3, 4]);
+    birds[birds.length - 1].animations.play('fly', 20, true);
 }
 
 /**
