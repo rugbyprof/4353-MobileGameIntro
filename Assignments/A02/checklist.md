@@ -23,7 +23,7 @@
 | ***5*** | ***Bomb***                                     |  **20** |        |
 | -       | Player touching bomb resets score to 0         |         |        |
 |         |                                                |         |        |
-|         | Totals:                                        | **100** |        |
+|         | Total:                                          | **100** |        |
 
 ### Comments:
 ```
