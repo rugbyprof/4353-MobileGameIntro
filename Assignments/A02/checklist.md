@@ -21,7 +21,7 @@
 | -       | Game stops after some X time                   |      15 |        |
 |         |                                                |         |        |
 | ***5*** | ***Bomb***                                     |  **20** |        |
-| -       | Player touching bomb resets score to 0         |         |        |
+| -       | Player touching bomb resets score to 0         |   20    |        |
 |         |                                                |         |        |
 |         | Total:                                          | **100** |        |
 
