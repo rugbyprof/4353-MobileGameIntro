@@ -28,7 +28,7 @@ play.prototype = {
 		this.sound.kill = this.game.add.audio('kill')
 
 		// Music
-		this.music = this.game.add.sound('bg_edm')
+		this.music = this.game.add.audio('music')
 		this.music.play('', 0, 0.5, true)
 
 		this.physics.startSystem(Phaser.Physics.ARCADE)
@@ -43,7 +43,7 @@ play.prototype = {
 		this.player.body.collideWorldBounds = true
 		this.player.scale.setTo(.5, .5)
 		this.player.anchor.setTo(.5, .5)
-		//this.player.body.setSize(20,30)
+		this.player.body.setSize(this.player.width-10,this.player.height)
 
 		// Score label
 		this.bmpText = this.game.add.bitmapText(this.game.width / 2, 100, 'fontUsed', '', 150);
@@ -67,17 +67,18 @@ play.prototype = {
 			var gap = 120
 			var offset = (Math.random() < 0.5 ? -1 : 1) * Math.random() * (150)
 
-			this.spawnObstacle('obstacle', w / 2 - platform_width / 2 - gap / 2 + offset, this.game.height, speed = 200, has_given_point = false)
-			this.spawnObstacle('obstacle', w / 2 + platform_width / 2 + gap / 2 + offset, this.game.height, speed = 200, has_given_point = true)
+			this.spawnObstacle(this.game.global.obstacle_id++, w / 2 - platform_width / 2 - gap / 2 + offset, this.game.height, speed = 200, has_given_point = false)
+			this.spawnObstacle(this.game.global.obstacle_id++, w / 2 + platform_width / 2 + gap / 2 + offset, this.game.height, speed = 200, has_given_point = true)
 		}
 
-		this.move()
+		this.move();
+		
 		frame_counter++
-		this.game.global.score++
+		this.game.global.score += this.scorePoint();
 	},
 
-	spawnObstacle: function (entity, x, y, speed) {
-		var obstacle = this.obstacles.create(x, y, entity)
+	spawnObstacle: function (entity, x, y, speed,has_given_point) {
+		var obstacle = this.obstacles.create(x, y, 'obstacle',entity)
 
 		// Uncomment for debugging
 		obstacles.push(obstacle)
@@ -94,25 +95,51 @@ play.prototype = {
 
 		obstacle.checkWorldBounds = true;
 		// Kill obstacle/enemy if vertically out of bounds
-		obstacle.events.onOutOfBounds.add(this.killObstacleIfHeightLessThanZero, this);
+		obstacle.events.onOutOfBounds.add(this.killObstacle, this);
+
+		obstacle.outOfBoundsKill = true;
+		console.log(this.obstacles);
 	},
 
-	killObstacleIfHeightLessThanZero: function (obstacle) {
-		if (obstacle.body.y < 0) {
-			obstacle.kill()
+	killObstacle: function (obstacle) {
+		console.log(obstacle);
+		this.obstacles.remove(obstacle);
+		console.log(this.obstacles.children.length);
+	},
+
+	scorePoint: function () {
+		//console.log(this.obstacles)
+		var point = 0;
+		var obstacles = this.obstacles.children;
+
+		for(var i=0;i<obstacles.length;i++){
+			if(obstacles[i].visible){
+				// console.log("vis: ")
+				// console.log(obstacles[i].y,this.player.y);
+				let py = this.player.y;
+				let oy = obstacles[i].y;
+				let ox = obstacles[i].x;
+
+				//if player is below obstacle and within 5 pixels and choose only one of the pair
+				if(py > oy && Math.abs(py-oy) < 5 && ox < this.game.width/2){
+					point++;
+					this.sound.score.play('', 0, 0.5, false)
+				}
+			}
 		}
+		return point;
 	},
-
-	scorePoint: function (obstacle) {},
 
 	killPlayer: function (player) {
 
 		//issues with this
-		this.game.plugins.screenShake.shake(20);
-		player.kill();
-		this.game.state.start('gameOver');
+		//this.game.plugins.screenShake.shake(20);
+		this.sound.kill.play('', 0, 0.5, false)
+		// player.kill();
+		// this.game.state.start('gameOver');
 
 	},
+	
 
 	// Tap on touchscreen or click with mouse
 	onDown: function (pointer) {},
@@ -120,10 +147,39 @@ play.prototype = {
 	// Move player
 	move: function () {
 		if (this.game.input.activePointer.isDown) {
-
+			//console.log(this.game.input.x);
+			let rate = this.moveSpeed(this.game.input.x,this.game.width);
+			let angle= this.moveAngle(rate,3);
+			//console.log("rate: " + rate);
+			this.player.x += rate;
+			this.player.angle = angle;
 		} else {
-
+			this.player.angle = 0;
 		}
+	},
+	moveAngle: function(rate,factor){
+		
+			return rate * factor;
+	},
+
+	moveSpeed: function(x,width,skill=2){
+		var ratio = 0;
+
+		if(x < width/2){
+			ratio = x/(width/2);
+			ratio *=10;
+			ratio = Math.ceil(ratio);
+			ratio /=2;
+			rate = (5 - ratio) * -1;
+		}else{
+			ratio = x/width;
+			ratio *=10;
+			ratio = Math.ceil(ratio);
+			ratio /=2;
+			rate = ratio;
+		}
+		console.log(rate*skill);
+		return rate*skill;
 	},
 
 	pauseAndUnpause: function (game) {

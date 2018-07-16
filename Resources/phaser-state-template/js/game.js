@@ -4,7 +4,6 @@ var COLORS_PASTEL = ['#FF4848', '#FF68DD', '#FF62B0', '#FE67EB', '#E469FE', '#D5
 var BG_COLOR = COLORS_PASTEL[Math.floor(Math.random()*(COLORS_PASTEL.length-1))]
 
 
-// This starts everything off!
 window.onload = main()
 function main()
 {
@@ -13,7 +12,8 @@ function main()
 
 	game.global = {
 		score:0,
-		best_score:0
+		best_score:0,
+		obstacle_id:0
 	}
 
 	game.state.add("boot", boot)
