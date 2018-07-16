@@ -12,7 +12,8 @@ preload.prototype = {
 		this.load.setPreloadSprite(loading)
 		
 		// game entities/world
-		this.load.image('player', 'images/player_x1.png')
+		//this.load.image('player', 'images/player_x1.png')
+		this.load.image('player', 'images/parachute.png')
 		this.load.image('obstacle', 'images/platform_thin_x7.png')
 		this.load.image('pause', 'images/pause.png')
 		this.load.image('bg', 'images/cream.png')

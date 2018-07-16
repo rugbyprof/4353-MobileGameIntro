@@ -14,6 +14,7 @@ boot.prototype =
 
 		if(this.isDeviceMobile()) // if mobile
 		{
+			console.log(this.isDeviceMobile());
 			// using outerWidth fixes the scaling problem in mobile devices. FINALLY SOLVED THIS CRAP!
 			this.scale.minWidth = window.outerWidth
 			this.scale.minHeight = window.outerHeight
