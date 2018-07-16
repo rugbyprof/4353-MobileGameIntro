@@ -10,15 +10,19 @@
 | ***2*** | ***Sprites***                                  |  **10** |        |
 | -       | Star sprite was changed to something else.     |       5 |        |
 | -       | Player sprite was changed.                     |       5 |        |
+|         |                                                |         |        |
 | ***3*** | ***Death Counter***                            |  **30** |        |
 | -       | Death counter added, game does not restart     |      10 |        |
 | -       | Death counter was placed in correct location   |      10 |        |
 | -       | Death counter correctly counts deaths          |      10 |        |
+|         |                                                |         |        |
 | ***4*** | ***Timer***                                    |  **30** |        |
 | -       | Timer exists and in proper format and location |      15 |        |
 | -       | Game stops after some X time                   |      15 |        |
+|         |                                                |         |        |
 | ***5*** | ***Bomb***                                     |  **20** |        |
 | -       | Player touching bomb resets score to 0         |         |        |
+|         |                                                |         |        |
 |         | Totals:                                        | **100** |        |
 
 ### Comments:
