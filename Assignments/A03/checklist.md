@@ -2,10 +2,11 @@
 
 |    #    |                                       Item                                       |  Value  | Earned |
 | :------ | :------------------------------------------------------------------------------- | ------: | ------ |
-| ***1*** | ***General***                                                                    |  **10** |        |
-| -       | `repository`  exists                                                             |     3.3 |        |
-| -       | `assignments` folder exists in `                                                 |     3.3 |        |
-| -       | Code is commented                                                                |     3.3 |        |
+| ***1*** | ***General***  (the value of this will go up with subsequent assignments)         |  **10** |        |
+| -       | `repository`  exists                                                             |         |        |
+| -       | `assignments` folder exists in Repo                                              |         |        |
+| -       | `A03` folder exists in `assignments`                                             |         |        |
+| -       | Code is commented                                                                 |         |        |
 |         |                                                                                  |         |        |
 | ***2*** | ***Obstacles***                                                                  |  **90** |        |
 | -       | Obstacles changed to random items not in pairs.                                  |      30 |        |

@@ -3,9 +3,10 @@
 |    #    |                      Item                      |  Value  | Earned |
 | :------ | :--------------------------------------------- | ------: | ------ |
 | ***1*** | ***General***                                  |  **10** |        |
-| -       | `repository`  exists                           |     3.3 |        |
-| -       | `assignments` folder exists in `               |     3.3 |        |
-| -       | Code is commented                              |     3.3 |        |
+| -       | `repository`  exists                           |         |        |
+| -       | `assignments` folder exists in Repo            |         |        |
+| -       | `A02` folder exists in `assignments`           |         |        |
+| -       | Code is commented                              |         |        |
 |         |                                                |         |        |
 | ***2*** | ***Sprites***                                  |  **10** |        |
 | -       | Star sprite was changed to something else.     |       5 |        |
