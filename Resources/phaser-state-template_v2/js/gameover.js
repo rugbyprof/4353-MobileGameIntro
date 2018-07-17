@@ -37,7 +37,7 @@ var gameOver = {
 			game.global.best_score = game.global.score
 		}
 
-		game.input.onDown.add(listener, this)
+		game.input.onDown.add(this.listener, this)
 	},
 
 	listener: function () {

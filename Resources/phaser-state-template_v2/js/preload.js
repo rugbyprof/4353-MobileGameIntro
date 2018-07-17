@@ -20,7 +20,7 @@ var preload = {
 		this.load.audio('bg_spin', 'sounds/spin_bg_music.mp3')
 		this.load.audio('bg_edm', 'sounds/edm_bg_music.mp3')
 		this.load.audio('score', 'sounds/score.wav')
-		this.load.audio('kill', 'sounds/kill.ogg')
+		this.load.audio('kill', 'sounds/Ouch.ogg')
 		this.load.audio('music', 'sounds/abstractionRapidAcrobatics.wav')
 
 		// font

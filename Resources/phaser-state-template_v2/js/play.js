@@ -127,8 +127,8 @@ var play = {
 		//issues with this
 		//game.plugins.screenShake.shake(20);
 		this.sound.kill.play('', 0, 0.5, false)
-		// player.kill();
-		// game.state.start('gameOver');
+		player.kill();
+		game.state.start('gameOver');
 
 	},
 
