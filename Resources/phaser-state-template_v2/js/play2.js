@@ -1,6 +1,6 @@
-var play = {
+var play2 = {
 	create: function () {
-		console.log("play_2.js");
+		console.log("play2.js");
 		// Game width and height for convenience
 		w = game.width
 		h = game.height
@@ -70,11 +70,6 @@ var play = {
 
 		frame_counter++
 		game.global.score += this.scorePoint();
-
-		if(game.global.score >= 3){
-			game.global.level++;
-			game.state.start('mainMenu');
-		}
 	},
 
 	spawnObstacle: function (entity, x, y, speed, has_given_point) {

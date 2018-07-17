@@ -9,13 +9,15 @@ var game = new Phaser.Game(450, 550, Phaser.Canvas, "game")
 game.global = {
 	score: 0,
 	best_score: 0,
-	obstacle_id: 0
+	obstacle_id: 0,
+	level:1
 }
 
 game.state.add("boot", boot)
 game.state.add("preload", preload)
 game.state.add("mainMenu", mainMenu)
 game.state.add("play", play)
+game.state.add("play2", play2)
 game.state.add("gameOver", gameOver)
 game.state.start("boot")
 
