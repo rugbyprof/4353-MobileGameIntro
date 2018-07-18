@@ -32,11 +32,42 @@ var play = {
 		this.obstacles = game.add.group()
 
 		// Player
-		this.player = game.add.sprite(game.width / 2, 250, 'player')
+		//this.player = game.add.sprite(game.width / 2, 250, 'player')
+
+		this.laserSprites = {
+			laser:game.add.sprite(0,0, 'ufoAtlas'),
+			buildUp:game.add.sprite(0,0, 'ufoAtlas'),
+			blast:game.add.sprite(0,0, 'ufoAtlas'),
+			bolt:game.add.sprite(0,0, 'ufoAtlas')
+		}
+		
+		this.laserSprites.laser.alpha = 0;
+		this.laserSprites.buildUp.alpha = 0;
+		this.laserSprites.blast.alpha = 0;
+		this.laserSprites.bolt.alpha = 0;
+
+		this.laserAnimations = {
+			laser:this.laserSprites.laser.animations.add('laser', Phaser.Animation.generateFrameNames('Laser', 1, 9), 50, false),
+			buildUp:this.laserSprites.buildUp.animations.add('buildUp', Phaser.Animation.generateFrameNames('BuildUp', 1, 4), 50, false),
+			blast:this.laserSprites.blast.animations.add('blast', Phaser.Animation.generateFrameNames('Blast', 1, 3), 50, false),
+			bolt:this.laserSprites.bolt.animations.add('bolt', Phaser.Animation.generateFrameNames('Bolt', 1, 4), 50, false)
+		}
+	
+		
+		this.laserAnimations.laser.onComplete.add(this.laserStopped,this);
+		
+
+		this.player = game.add.sprite(game.width / 2, 250, 'ufo');
+		this.player.animations.add('hover', Phaser.Animation.generateFrameNames('Hover', 1, 12), 20, true);
+		this.player.animations.play('hover');
+
+		
+		
+
 		game.physics.enable(this.player, Phaser.Physics.ARCADE)
 		this.player.enableBody = true
 		this.player.body.collideWorldBounds = true
-		this.player.scale.setTo(.5, .5)
+		//this.player.scale.setTo(.5, .5)
 		this.player.anchor.setTo(.5, .5)
 		this.player.body.setSize(this.player.width - 10, this.player.height)
 
@@ -47,6 +78,9 @@ var play = {
 
 		// Support for mouse click and touchscreen input
 		game.input.onDown.add(this.onDown, this)
+
+		this.cursors = game.input.keyboard.createCursorKeys();
+		this.downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
 
 		this.pauseAndUnpause(game)
 	},
@@ -68,10 +102,18 @@ var play = {
 
 		this.move();
 
+		//  Allow the player to jump if they are touching the ground.
+		if (this.downKey.isDown) {
+			this.laserSprites.laser.alpha  = 1;
+			//this.laserSprites.laser.x = this.player.x-5;
+			//this.laserSprites.laser.y = this.player.y;
+			this.laserAnimations.laser.play('laser');
+		}
+
 		frame_counter++
 		game.global.score += this.scorePoint();
 
-		if(game.global.score >= 3){
+		if (game.global.score >= 10) {
 			game.global.level++;
 			game.state.start('mainMenu');
 		}
@@ -132,8 +174,8 @@ var play = {
 		//issues with this
 		//game.plugins.screenShake.shake(20);
 		this.sound.kill.play('', 0, 0.5, false)
-		player.kill();
-		game.state.start('gameOver');
+		//player.kill();
+		//game.state.start('gameOver');
 
 	},
 
@@ -201,6 +243,9 @@ var play = {
 					pause_watermark.destroy()
 				}
 			}, self)
+	},
+	laserStopped: function(laser){
+		laser.alpha = 0;
 	},
 
 	render: function () {

@@ -1,0 +1,127 @@
+[{
+    "name": "1",
+    "x": 76,
+    "y": 76,
+    "width": 57,
+    "height": 38
+}, {
+    "name": "2",
+    "x": 7,
+    "y": 186,
+    "width": 56,
+    "height": 37
+}, {
+    "name": "3",
+    "x": 76,
+    "y": 190,
+    "width": 59,
+    "height": 41
+}, {
+    "name": "4",
+    "x": 76,
+    "y": 115,
+    "width": 58,
+    "height": 36
+}, {
+    "name": "5",
+    "x": 9,
+    "y": 35,
+    "width": 56,
+    "height": 36
+}, {
+    "name": "6",
+    "x": 7,
+    "y": 110,
+    "width": 58,
+    "height": 37
+}, {
+    "name": "7",
+    "x": 9,
+    "y": 0,
+    "width": 57,
+    "height": 34
+}, {
+    "name": "8",
+    "x": 76,
+    "y": 41,
+    "width": 59,
+    "height": 34
+}, {
+    "name": "9",
+    "x": 7,
+    "y": 76,
+    "width": 57,
+    "height": 33
+}, {
+    "name": "10",
+    "x": 76,
+    "y": 152,
+    "width": 57,
+    "height": 37
+}, {
+    "name": "11",
+    "x": 7,
+    "y": 148,
+    "width": 56,
+    "height": 37
+}, {
+    "name": "12",
+    "x": 76,
+    "y": 0,
+    "width": 60,
+    "height": 40
+}, {
+    "name": "L1",
+    "x": 145,
+    "y": 0,
+    "width": 11,
+    "height": 37
+}, {
+    "name": "L2",
+    "x": 0,
+    "y": 0,
+    "width": 8,
+    "height": 75
+}, {
+    "name": "L3",
+    "x": 67,
+    "y": 0,
+    "width": 8,
+    "height": 85
+}, {
+    "name": "L4",
+    "x": 145,
+    "y": 38,
+    "width": 7,
+    "height": 95
+}, {
+    "name": "L5",
+    "x": 137,
+    "y": 106,
+    "width": 5,
+    "height": 99
+}, {
+    "name": "L6",
+    "x": 0,
+    "y": 76,
+    "width": 6,
+    "height": 161
+}, {
+    "name": "L7",
+    "x": 137,
+    "y": 0,
+    "width": 7,
+    "height": 105
+}, {
+    "name": "L8",
+    "x": 67,
+    "y": 136,
+    "width": 8,
+    "height": 85
+}, {
+    "name": "L9",
+    "x": 67,
+    "y": 86,
+    "width": 6,
+    "height": 49
+}]
