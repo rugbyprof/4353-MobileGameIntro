@@ -25,7 +25,7 @@ Github Username: _____________________
 | -       | As score increases speed of obstacles increases                                | 10      |        |
 | -       | As score increases, frequency of obstacles increases                           | 10      |        |
 |         |                                                                                |         |        |
-| ***3*** | ***Bullets***                                                                  | **40**  |        |
+| ***3*** | ***Bullets***                                                                  | **50**  |        |
 | -       | The player sprite has the ability to shoot bullets                            | 10      |        |
 | -       | Bullets colliding with obstacles destroys obstacles                           | 10      |        |
 | -       | Animation plays when obstacle is destroyed                                     | 20      |        |
