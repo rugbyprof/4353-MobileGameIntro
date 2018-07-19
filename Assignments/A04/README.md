@@ -9,6 +9,8 @@
 - Your implementation of the checklist below should be different from my example code.  
 - For those of you who use all your own code ... good job. 
 
+### Checklist
+
 | #       | Item                                                                           | Value   | Earned |
 | :------ | :----------------------------------------------------------------------------- | ------: | ------ |
 | ***1*** | ***General***                                                                  | **10**  |        |
@@ -34,10 +36,6 @@
 |         |                                                                                |         |        |
 |         | Total:                                                                         | **100** |        |
 
-### Comments:
-```
-
-```
 
 [1]: http://f.cl.ly/items/3E231i211n2E042B1U3K/right.png  "Correct"
 [2]: http://f.cl.ly/items/2X473C1Q1F2x3S1E4231/wrong.gif  "Incorrect"
