@@ -26,15 +26,15 @@ Github Username: _____________________
 | -       | As score increases, frequency of obstacles increases                           | 10      |        |
 |         |                                                                                |         |        |
 | ***3*** | ***Bullets***                                                                  | **40**  |        |
-| -       | The player sprite has the ability to shoot bullets.                            | 10      |        |
-| -       | Bullets colliding with obstacles destroys obstacles.                           | 10      |        |
+| -       | The player sprite has the ability to shoot bullets                            | 10      |        |
+| -       | Bullets colliding with obstacles destroys obstacles                           | 10      |        |
 | -       | Animation plays when obstacle is destroyed                                     | 10      |        |
 | -       | Sound plays when obstacle is destroyed                                         | 10      |        |
 |         |                                                                                |         |        |
 | ***4*** | ***Score***                                                                    | **30**  |        |
 | -       | Score is increased as objects are destroyed                                    | 10      |        |
 | -       | Score no longer based on passing objects                                       | 10      |        |
-| -       | As difficulty increases, points for destroying objects increases.              | 10      |        |
+| -       | As difficulty increases, points for destroying objects increases              | 10      |        |
 |         |                                                                                |         |        |
 |         | Total:                                                                         | **100** |        |
 
