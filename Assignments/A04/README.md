@@ -1,6 +1,6 @@
 ## Program 3
 
-- Your game should be vaguely similar to what I demoed had in class. 
+- Your game should be vaguely similar to what I demoed in class. 
 - It can be a vertical or a side scroller.
 - It must generate obstacles that move toward the player originating from random locations just off screen. 
 - It should not act like the original game that generates two obstacles for the player to "fly" through.
