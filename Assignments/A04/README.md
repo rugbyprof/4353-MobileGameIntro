@@ -28,7 +28,7 @@ Github Username: _____________________
 | ***3*** | ***Bullets***                                                                  | **40**  |        |
 | -       | The player sprite has the ability to shoot bullets                            | 10      |        |
 | -       | Bullets colliding with obstacles destroys obstacles                           | 10      |        |
-| -       | Animation plays when obstacle is destroyed                                     | 10      |        |
+| -       | Animation plays when obstacle is destroyed                                     | 20      |        |
 | -       | Sound plays when obstacle is destroyed                                         | 10      |        |
 |         |                                                                                |         |        |
 | ***4*** | ***Score***                                                                    | **30**  |        |
@@ -36,7 +36,7 @@ Github Username: _____________________
 | -       | Score no longer based on passing objects                                       | 10      |        |
 | -       | As difficulty increases, points for destroying objects increases              | 10      |        |
 |         |                                                                                |         |        |
-|         | Total:                                                                         | **100** |        |
+|         | Total:                                                                         | **110** |        |
 
 
 [1]: http://f.cl.ly/items/3E231i211n2E042B1U3K/right.png  "Correct"
