@@ -48,6 +48,7 @@ function Ufo(game_copy) {
         this.laserAnimations['blast'] = this.laserSprites.blast.animations.add('blast', Phaser.Animation.generateFrameNames('Blast', 1, 3), 20, false);
         this.laserAnimations['bolt'] = this.laserSprites.bolt.animations.add('bolt', Phaser.Animation.generateFrameNames('Bolt', 1, 4), 20, false);
 
+        // order the animations
         this.laserAnimations.buildUp.onComplete.add(this.fireLaser,this);
         this.laserAnimations.laser.onComplete.add(this.laserStopped,this);
 
@@ -58,7 +59,7 @@ function Ufo(game_copy) {
 	    // We're going to set the body type to the ARCADE physics, since we don't need any advanced physics
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
         
-        this.bullets.createMultiple(1, 'bullet');
+        this.bullets.createMultiple(10, 'bullet');
         this.bullets.callAll('events.onOutOfBounds.add', 'events.onOutOfBounds', this.resetBullets);
         this.bullets.callAll('anchor.setTo', 'anchor', 0.5, 1);
         this.bullets.callAll('scale.setTo', 'scale', 0.3, 0.3);
