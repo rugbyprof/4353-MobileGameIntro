@@ -192,28 +192,16 @@ var level_01 = {
 		
 		obj.weapon.body.x = obj.player.x;
 		obj.weapon.body.y = obj.player.y;
-		
-		var Xnegate = (obj.enemy.x - obj.player.x) < 0  ? -1 : 1;
-		var Ynegate = (obj.enemy.y - obj.player.y) < 0  ? -1 : 1;
 
 		var angle = Math.atan2(obj.enemy.y - obj.player.y, obj.enemy.x - obj.player.x) * 180 / Math.PI;
-		
-		var Yratio = Math.abs(obj.enemy.y - obj.player.y) / game.height;
-		var Xratio = Math.abs(obj.enemy.x - obj.player.x) / game.width;
 
-		var xSpeed = obj.speed * Xnegate;
-		var ySpeed = Math.abs(obj.enemy.y - obj.player.y) * Ynegate;
-
-		console.log(Xratio,Yratio);
-		console.log(xSpeed,ySpeed);
-		console.log(angle);
+		var xSpeed = obj.speed * Math.cos(angle * (Math.PI / 180));
+		var ySpeed = obj.speed * Math.sin(angle * (Math.PI / 180));
 
 		obj.weapon.angle = angle;
 		obj.weapon.body.velocity.setTo(xSpeed,ySpeed);
-		//obj.weapon.body.velocity.setTo(xSpeed,500);
 
 		obj.weapon.animations.play('fire');
-		//game.physics.arcade.moveToPointer(obj.enemy, 300);
 	},
 
 	killWeaponProjectile: function(projectile){
