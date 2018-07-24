@@ -71,6 +71,8 @@ var level_01 = {
 		// Adding the knight atlas that contains all the animations
 		this.player = game.add.sprite(game.camera.width / 2, game.camera.height / 2, 'knight_atlas');
 
+		this.global.health = 100;
+
 		// Adding enemy (using same sprite as knight)
 		var ex = game.width * Math.random();
 		var ey = game.width * Math.random();
@@ -237,7 +239,7 @@ var level_01 = {
 	 * 			 can we make this global somehow?
 	 */
 	checkPlayerTransport: function (player) {
-		if (player.x < 0) {
+		if (player.x < 1411) {
 			game.global.current_level = 'level_02';
 			game.state.start(game.global.current_level);
 		} else if (player.x > game.width) {

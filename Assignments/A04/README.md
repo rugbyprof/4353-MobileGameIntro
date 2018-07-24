@@ -13,27 +13,27 @@
 
 Github Username: _____________________
 
-| #       | Item                                                                           | Value   | Earned |
-| :------ | :----------------------------------------------------------------------------- | ------: | ------ |
-| ***1*** | ***General***                                                                  | **10**  |        |
-| -       | `repository`  exists                                                           |         |        |
-| -       | `assignments` folder exists in Repo                                            |         |        |
-| -       | `A04` folder exists in `assignments`                                           |         |        |
-| -       | Code is commented                                                              |         |        |
-|         |                                                                                |         |        |
-| ***2*** | ***Difficulty***                                                               | **20**  |        |
-| -       | As score increases speed of obstacles increases                                | 10      |        |
-| -       | As score increases, frequency of obstacles increases                           | 10      |        |
-|         |                                                                                |         |        |
-| ***3*** | ***Bullets***                                                                  | **50**  |        |
-| -       | The player sprite has the ability to shoot bullets                            | 10      |        |
-| -       | Bullets colliding with obstacles destroys obstacles                           | 10      |        |
-| -       | Animation plays when obstacle is destroyed                                     | 20      |        |
-| -       | Sound plays when obstacle is destroyed                                         | 10      |        |
-|         |                                                                                |         |        |
-| ***4*** | ***Score***                                                                    | **30**  |        |
-| -       | Score is increased as objects are destroyed                                    | 10      |        |
-| -       | Score no longer based on passing objects                                       | 10      |        |
-| -       | As difficulty increases, points for destroying objects increases              | 10      |        |
-|         |                                                                                |         |        |
-|         | Total:                                                                         | **110** |        |
+| #       | Item                                                             | Value   | Earned |
+| :------ | :--------------------------------------------------------------- | ------: | ------ |
+| ***1*** | ***General***                                                    | **10**  |        |
+| -       | `repository`  exists                                             |         |        |
+| -       | `assignments` folder exists in Repo                              |         |        |
+| -       | `A04` folder exists in `assignments`                             |         |        |
+| -       | Code is commented                                                |         |        |
+|         |                                                                  |         |        |
+| ***2*** | ***Difficulty***                                                 | **20**  |        |
+| -       | As score increases speed of obstacles increases                  | 10      |        |
+| -       | As score increases, frequency of obstacles increases             | 10      |        |
+|         |                                                                  |         |        |
+| ***3*** | ***Bullets***                                                    | **50**  |        |
+| -       | The player sprite has the ability to shoot bullets               | 10      |        |
+| -       | Bullets colliding with obstacles destroys obstacles              | 10      |        |
+| -       | Animation plays when obstacle is destroyed                       | 20      |        |
+| -       | Sound plays when obstacle is destroyed                           | 10      |        |
+|         |                                                                  |         |        |
+| ***4*** | ***Score***                                                      | **30**  |        |
+| -       | Score is increased as objects are destroyed                      | 10      |        |
+| -       | Score no longer based on passing objects                         | 10      |        |
+| -       | As difficulty increases, points for destroying objects increases | 10      |        |
+|         |                                                                  |         |        |
+|         | Total:                                                           | **110** |        |

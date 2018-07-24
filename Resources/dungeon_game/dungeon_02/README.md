@@ -19,7 +19,7 @@
     - Die
     - Attack (left mouse)
     - Jump (space bar)
-    - Jump Attack (shift left mouse)
+    - Jump Attack (space left mouse)
 
 ### Phaser Keys and Actions
     - https://phaser.io/docs/2.6.1/Phaser.KeyCode.html

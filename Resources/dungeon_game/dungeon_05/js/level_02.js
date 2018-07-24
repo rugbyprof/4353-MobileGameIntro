@@ -148,7 +148,7 @@ var level_02 = {
 		this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
 		this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 		this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-		this.addPauseButton(game);
+		//this.addPauseButton(game);
 	},
 
 	update: function () {
@@ -205,6 +205,17 @@ var level_02 = {
 
 		// Necessary to make sure we always check player colliding with objects
 		game.physics.arcade.collide(this.player, this.layers.collision_layer);
+
+	},
+	getTileProperties: function (layer, player) {
+
+		var x = layer.getTileX(player.x);
+		var y = layer.getTileY(player.y);
+
+		var tile = this.map.getTile(x, y, layer);
+
+		console.log(tile);
+		console.log(tile.index);
 
 	},
 

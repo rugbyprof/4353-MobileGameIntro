@@ -37,7 +37,7 @@ var level_01 = {
 		this.fire_ball = game.add.sprite(game.width/2, game.height/2, 'fire_ball');
 		this.fire_ball.animations.add('fire', Phaser.Animation.generateFrameNames('fire_ball', 0, 9), 5, false);
 		game.physics.arcade.enable(this.fire_ball);
-		this.fire_ball.scale.setTo(0.5, 0.5);
+		this.fire_ball.scale.setTo(1, 1);
 		this.fire_ball.anchor.setTo(0.5, 0.5);
 		this.fire_ball.body.allowGravity = true;
 

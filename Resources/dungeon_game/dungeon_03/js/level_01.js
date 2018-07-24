@@ -106,7 +106,7 @@ var level_01 = {
 			this.chasePlayer = true;
 		}
 		if(this.chasePlayer){
-			this.moveTowardPlayer(this.enemy,200);
+			this.moveTowardPlayer(this.enemy,100);
 			this.checkAttack(this.player,this.enemy);
 		}
 

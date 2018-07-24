@@ -1,0 +1,93 @@
+{
+    "frames": [{
+        "filename": "s1",
+        "frame": {
+            "x": 0,
+            "y": 0,
+            "w": 225,
+            "h": 224
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 225,
+            "h": 224
+        },
+        "sourceSize": {
+            "w": 225,
+            "h": 224
+        }
+    }, {
+        "filename": "s2",
+        "frame": {
+            "x": 0,
+            "y": 225,
+            "w": 224,
+            "h": 225
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 224,
+            "h": 225
+        },
+        "sourceSize": {
+            "w": 224,
+            "h": 225
+        }
+    }, {
+        "filename": "s3",
+        "frame": {
+            "x": 226,
+            "y": 0,
+            "w": 225,
+            "h": 224
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 225,
+            "h": 224
+        },
+        "sourceSize": {
+            "w": 225,
+            "h": 224
+        }
+    }, {
+        "filename": "s4",
+        "frame": {
+            "x": 226,
+            "y": 225,
+            "w": 224,
+            "h": 225
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 224,
+            "h": 225
+        },
+        "sourceSize": {
+            "w": 224,
+            "h": 225
+        }
+    }],
+    "meta": {
+        "app": "https://www.leshylabs.com/apps/sstool/",
+        "version": "Leshy SpriteSheet Tool v0.8.4",
+        "image": "spiral_sheet.png",
+        "size": {
+            "w": 451,
+            "h": 450
+        },
+        "scale": 1
+    }
+}

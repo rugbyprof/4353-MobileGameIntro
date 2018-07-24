@@ -34,3 +34,13 @@
 
 - Weapons Class
     - https://github.com/photonstorm/phaser-ce/blob/v2.11.0/src/plugins/weapon/WeaponPlugin.js#L117
+
+### Cleaning up Animation
+
+### Animation Groups
+
+### Handling Sprite Children 
+	- collision
+
+
+### Radar / HUD

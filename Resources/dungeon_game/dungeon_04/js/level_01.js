@@ -46,15 +46,20 @@ var level_01 = {
 		this.map.addTilesetImage('elements', 'elemental');
 		this.map.addTilesetImage('wall/int_rock', 'int_rock');
 
-		this.layers = {
-			ground_layer: this.map.createLayer('0_floor'),
-			terrain_layer: this.map.createLayer('1_terrain'),
-			object_layer: this.map.createLayer('2_object'),
-			roof_layer: this.map.createLayer('3_roof'),
-			collision_layer: this.map.createLayer('collision')
-		};
+		this.layers = {};
 
-		this.layers.collision_layer.alpha = 0
+		this.layers['ground_layer'] = this.map.createLayer('0_floor');
+		this.layers['terrain_layer'] = this.map.createLayer('1_terrain');
+		this.layers['object_layer'] = this.map.createLayer('2_object');
+
+		// Adding the knight atlas that contains all the animations
+		this.player = game.add.sprite(game.camera.width / 2, game.camera.height / 2, 'knight_atlas');
+
+		this.layers['roof_layer'] = this.map.createLayer('3_roof');
+		this.layers['collision_layer'] = this.map.createLayer('collision');
+	
+
+		this.layers.collision_layer.alpha = .5
 
 		game.physics.arcade.enable(this.layers.collision_layer);
 
@@ -69,8 +74,7 @@ var level_01 = {
 		this.prevDir = ''; // holds sprites previous direction (left , right) so
 		// we can face the correct direction when using the 'idle' animation
 
-		// Adding the knight atlas that contains all the animations
-		this.player = game.add.sprite(game.camera.width / 2, game.camera.height / 2, 'knight_atlas');
+
 
 		// Adding enemy (using same sprite as knight)
 		var ex = game.width * Math.random();
@@ -221,6 +225,10 @@ var level_01 = {
 				enemy.animations.play('attack_right');
 			}
 		}
+	},
+
+	hitWall: function(player){
+		console.log(player);
 	},
 
 	render: function () {

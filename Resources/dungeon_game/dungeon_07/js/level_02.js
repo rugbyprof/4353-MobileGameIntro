@@ -3,7 +3,7 @@ var level_02 = {
 	preload: function () {
 		console.log("level_02.js");
 		// Load tile map
-		game.load.tilemap('level_02', 'assets/maps/cave_less.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('level_02', 'assets/maps/cave.json', null, Phaser.Tilemap.TILED_JSON);
 
 		//map tile images:
 		game.load.image('ground', 'assets/tileset/ground/brown.png');
@@ -79,9 +79,11 @@ var level_02 = {
 			collision_layer: this.map.createLayer('collision')
 		};
 
-		this.layers.collision_layer.alpha = .5
+
+		this.layers.collision_layer.alpha = 0
 
 		game.physics.arcade.enable(this.layers.collision_layer);
+		game.physics.arcade.enable(this.layers.object_layer);
 
 		this.map.setCollision(1, true, this.layers.collision_layer);
 		//this.map.setTileIndexCallback(45, this.hitWall, this);
@@ -94,9 +96,10 @@ var level_02 = {
 		this.prevDir = ''; // holds sprites previous direction (left , right) so
 		// we can face the correct direction when using the 'idle' animation
 
-		this.portal = game.add.sprite(game.camera.width / 2 + 50, game.camera.height / 2, 'red_portal');
-		this.portal.animations.add('rotate', Phaser.Animation.generateFrameNames('red_portal', 1, 3), 20, true);
+		this.portal = game.add.sprite(0, 0, 'red_portal');
+		this.portal.animations.add('rotate', Phaser.Animation.generateFrameNames('red_portal', 1, 3), 60, true);
 		this.portal.animations.play('rotate');
+		this.portal.alpha = 0;
 
 		// Adding the knight atlas that contains all the animations
 		this.player = game.add.sprite(game.camera.width / 2, game.camera.height / 2, 'knight_atlas');
@@ -127,8 +130,6 @@ var level_02 = {
 		this.enemy.animations.add('attack_right', Phaser.Animation.generateFrameNames('Attack_right', 0, 9), 20, true);
 		this.enemy.animations.play('idle_left');
 
-
-
 		// turn physics on for player
 		game.physics.arcade.enable(this.player);
 
@@ -148,12 +149,14 @@ var level_02 = {
 		// set the anchor for sprite to middle of the view
 		this.player.anchor.setTo(0.5);
 
+		this.portal.anchor.setTo(0.5);
+
 		this.downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
 		this.upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
 		this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
 		this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 		this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-		this.addPauseButton(game);
+		//this.addPauseButton(game);
 	},
 
 	update: function () {
@@ -187,7 +190,8 @@ var level_02 = {
 
 		if (this.leftKey.isDown || this.rightKey.isDown || this.upKey.isDown || this.downKey.isDown) {
 
-			this.getTileProperties(this.layers.ground_layer, this.player);
+			this.getTileProperties(this.layers.object_layer, this.player);
+			this.checkTileSteppedOn(this.layers.object_layer, this.player);
 		}
 
 		if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown) {
@@ -200,60 +204,16 @@ var level_02 = {
 			this.player.body.velocity.y = 0;
 		}
 
-		if (this.spaceBar.isDown) {
-			this.chasePlayer = true;
-		}
-		if (this.chasePlayer) {
-			this.moveTowardPlayer(this.enemy, 200);
-			this.checkAttack(this.player, this.enemy);
+		if (this.isOverlapped(this.player, this.portal)) {
+			console.log("bingo");
+			this.transportPlayer(this.portal.x, this.portal.y, 1568, 1760);
 		}
 
 		// Necessary to make sure we always check player colliding with objects
 		game.physics.arcade.collide(this.player, this.layers.collision_layer);
-
+		game.physics.arcade.collide(this.player, this.layers.object_layer);
 	},
 
-	/**
-	 * Very basic move monster towards player function.
-	 * Some options to make it better would be to:
-	 *  - Parameterize it so you can pass in values to adjust behaviors
-	 *  - Add animations to make gameplay look better
-	 *  - Add some random behaviors (like swap direction based on random choices)
-	 */
-	moveTowardPlayer: function (enemy, speed) {
-		if (this.player.x < enemy.x) {
-			enemy.body.velocity.x = -speed;
-		} else {
-			enemy.body.velocity.x = speed;
-		}
-		if (this.player.y < enemy.y) {
-			enemy.body.velocity.y = -speed;
-		} else {
-			enemy.body.velocity.y = speed;
-		}
-	},
-
-	/**
-	 * basic check for attack (not good)
-	 */
-	checkAttack: function (player, enemy) {
-		// Get how close players are together 
-		var xClose = Math.abs(player.x - enemy.x);
-		var yClose = Math.abs(player.y - enemy.y);
-
-		//console.log(xClose-yClose);
-		// Based on my arbitrary value of 5, I run an attack animation
-		// More precision, and direction of attack need added.
-		if (Math.abs(xClose - yClose) < 5) {
-			enemy.body.velocity.x = 0;
-			enemy.body.velocity.y = 0;
-			if (player.x < enemy.x) {
-				enemy.animations.play('attack_left');
-			} else {
-				enemy.animations.play('attack_right');
-			}
-		}
-	},
 	getTileProperties: function (layer, player) {
 
 		var x = layer.getTileX(player.x);
@@ -261,8 +221,91 @@ var level_02 = {
 
 		var tile = this.map.getTile(x, y, layer);
 
-		console.log(tile);
+		if (tile) {
+			console.log(x, y);
+			console.log(tile);
+		}
 
+	},
+
+	checkTileSteppedOn: function (layer, player) {
+		var x = layer.getTileX(player.x);
+		var y = layer.getTileY(player.y);
+
+		var tile = this.map.getTile(x, y, layer);
+
+		if (tile) {
+			if (tile.index == 14) {
+				this.showPortal();
+			}
+
+		}
+	},
+
+	showPortal: function () {
+		this.portal.alpha = 1;
+		this.portal.x = 544;
+		this.portal.y = 544;
+	},
+
+	isOverlapped: function (spriteA, spriteB) {
+
+		var boundsA = spriteA.getBounds();
+		var boundsB = spriteB.getBounds();
+
+		return Phaser.Rectangle.intersects(boundsA, boundsB);
+
+	},
+
+	transportPlayer: function (x1, y1, x2, y2) {
+		movePlayer = game.add.tween(this.player).to({
+			x: x1,
+			y: y1
+		}, 500, Phaser.Easing.Linear.None, true);
+		fade = game.add.tween(this.player).to({
+			alpha: 0
+		}, 750, "Linear", true);
+		scale = game.add.tween(this.player.scale).to({
+			x: .2,
+			y: .2
+		}, 1000, Phaser.Easing.Linear.None, true);
+		
+		game.time.events.add(Phaser.Timer.SECOND * 1, function(){
+			movePlayer.stop();
+			scale.stop();
+			fade.stop();
+		 }, this);
+		 game.time.events.add(Phaser.Timer.SECOND * 1.1, this.movePlayer , this,x2,y2);
+	},
+
+	tweenScalePlayer: function () {
+
+		scale = game.add.tween(this.player.scale).to({
+			x: .2,
+			y: .2
+		}, 1000, Phaser.Easing.Linear.None, true);
+	},
+
+	tweenFadePlayer: function () {
+		fade = game.add.tween(this.player).to({
+			alpha: 0
+		}, 750, "Linear", true);
+	},
+
+	tweenMovePlayer: function (x, y) {
+
+		var px = x;
+		var py = y;
+		movePlayer = game.add.tween(this.player).to({
+			x: px,
+			y: py
+		}, 500, Phaser.Easing.Linear.None, true);
+	},
+
+	movePlayer: function(x,y){
+		this.player.reset(x,y);
+		this.player.alpha = 1;
+		this.player.scale.setTo(1);
 	},
 
 	render: function () {
