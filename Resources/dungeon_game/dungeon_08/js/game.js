@@ -7,7 +7,9 @@ game.global = {
 	best_score: 0,
     level:1,
     backgroundColor:"#000000",
-    current_level: "level_01"
+    current_level: "level_01",
+    game_width: 1024,
+    game_height: 768
 }
 
 game.state.add("boot", boot);

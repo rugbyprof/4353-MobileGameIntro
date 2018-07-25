@@ -25,6 +25,7 @@ var preLoad = {
 		//game.load.spritesheet('spritesheetKey', 'path/to/sheet.png', frame_width, frame_height);
 		game.load.atlas('knight_atlas', 'assets/sprites/knight_atlas.png', 'assets/sprites/knight_atlas.json');
 		game.load.atlas('fire_ball', 'assets/sprites/fire_ball.png', 'assets/sprites/fire_ball.json');
+		game.load.spritesheet('death_fire', 'assets/sprites/death_fire.png', 80, 80);
 
 		// load audio here: 
 		//////////////////////////////////////////////////////

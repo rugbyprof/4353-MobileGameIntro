@@ -18,6 +18,11 @@ function Player(game_copy) {
         // Adding the knight atlas that contains all the animations
         this.sprite = game.add.sprite(this.x, this.y, atlas);
 
+        this.deathFire = game.add.sprite(0,0,'death_fire');
+        this.deathFire.animations.add('fry');
+        this.deathFire.alpha = 0;
+        this.deathFire.anchor.setTo(0.5);
+
         this.sprite.health = 10;
 
         // Add walking and idle animations. Different aninmations are needed based on direction of movement.
@@ -25,7 +30,7 @@ function Player(game_copy) {
         this.sprite.animations.add('walk_right', Phaser.Animation.generateFrameNames('Walk_right', 0, 8), 20, true);
         this.sprite.animations.add('idle_left', Phaser.Animation.generateFrameNames('Idle_left', 0, 9), 20, true);
         this.sprite.animations.add('idle_right', Phaser.Animation.generateFrameNames('Idle_right', 0, 9), 20, true);
-        this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('Dead', 1, 10), 20, false);
+        this.die = this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('Dead', 1, 10), 20, false);
 
         if (this.sprite.x > game.width / 2) {
             console.log("right");
@@ -165,6 +170,12 @@ function Player(game_copy) {
         this.myHealthBar.setPercent((this.sprite.health / 10) * 100);
         if ((this.sprite.health / 10 * 100) <= 0) {
             this.sprite.play('die');
+            this.die.onComplete.add(function(){
+                this.deathFire.animations.play('fry', 30, true);
+            }, this);
+            this.deathFire.alpha = 1;
+            this.deathFire.x = this.sprite.x;
+            this.deathFire.y = this.sprite.y-10;
             this.dead = true;
         }
     }

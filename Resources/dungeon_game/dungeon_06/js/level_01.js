@@ -137,6 +137,10 @@ var level_01 = {
 			this.checkAttack(this.player,this.enemy);
 		}
 
+		this.game.physics.arcade.collide(this.player.sprite, this.enemy.sprite, function(){    
+			player.killEnemy(score);
+		}, null, player);
+
 
 	},
 
