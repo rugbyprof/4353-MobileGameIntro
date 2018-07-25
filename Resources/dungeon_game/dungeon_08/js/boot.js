@@ -19,10 +19,10 @@ var boot = {
 
 		} else // if on computer
 		{
-			this.scale.minWidth = 750
-			this.scale.minHeight = 422
-			this.scale.maxWidth = 750
-			this.scale.maxHeight = 422
+			this.scale.minWidth = game.global.width
+			this.scale.minHeight = game.global.height
+			this.scale.maxWidth = game.global.width
+			this.scale.maxHeight = game.global.height
 		}
 
 		this.scale.pageAlignHorizontally = true

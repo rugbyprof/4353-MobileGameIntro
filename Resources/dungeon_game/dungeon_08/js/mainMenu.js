@@ -14,12 +14,12 @@ var mainMenu = {
         this.background = game.add.tileSprite(0, 0, w, h, 'splash');
 
         // Title
-        var logo = game.add.bitmapText(w / 2, -100, 'mainFont', '', 75)
-        logo.text = game.global.title;
-        logo.anchor.setTo(0.5, 0.5)
-        game.add.tween(logo).to({
-            y: h / 2 - 80
-        }, 1000, Phaser.Easing.Bounce.Out).start()
+        // var logo = game.add.bitmapText(w / 2, -100, 'mainFont', '', 75)
+        // logo.text = game.global.title;
+        // logo.anchor.setTo(0.5, 0.5)
+        // game.add.tween(logo).to({
+        //     y: h / 2 - 80
+        // }, 1000, Phaser.Easing.Bounce.Out).start()
 
         // Help
         var label = game.add.bitmapText(w / 2, h - 100, 'mainFont', '', 40);

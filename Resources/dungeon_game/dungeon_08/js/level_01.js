@@ -2,8 +2,8 @@ var level_01 = {
 
 	preload: function () {
 		console.log(game);
-		game.players['player'] = new Player(game);
-		game.players['enemy'] = new Player(game);
+		game.players['lplayer'] = new Player(game);
+		game.players['rplayer'] = new Player(game);
 	},
 	create: function () {
 		console.log("level_01.js");
@@ -14,24 +14,37 @@ var level_01 = {
 		this.prevDir = '';	// holds sprites previous direction (left , right) so
 							// we can face the correct direction when using the 'idle' animation
 
+		game.players['lplayer'].create(0, game.camera.height / 2,'knight_atlas');
+		game.players['rplayer'].create(game.camera.width, game.camera.height / 2,'knight_atlas');
 
-		game.players['player'].create(0, game.camera.height / 2,'knight_atlas');
-		game.players['enemy'].create(game.camera.width, game.camera.height / 2,'knight_atlas');
+		game.players['lplayer'].assignKeys(Phaser.Keyboard.X,Phaser.Keyboard.S,Phaser.Keyboard.F);
+		game.players['rplayer'].assignKeys(Phaser.Keyboard.DOWN,Phaser.Keyboard.UP,Phaser.Keyboard.LEFT);
 
-		game.players['player'].assignKeys(Phaser.Keyboard.X,Phaser.Keyboard.S,Phaser.Keyboard.F);
-		game.players['enemy'].assignKeys(Phaser.Keyboard.DOWN,Phaser.Keyboard.UP,Phaser.Keyboard.SPACE);
+		this.v = game.input.keyboard.addKey(Phaser.Keyboard.V);
 
+		game.players['rplayer'].load('rand',Math.random());
+		game.players['lplayer'].load('rand',Math.random());
 
 		game.addPauseButton(game);
 	},
 
 	update: function () {
 
-		game.players['player'].move();
-		game.players['enemy'].move();
+		game.players['lplayer'].move();
+		game.players['rplayer'].move();
 
-		game.players['player'].checkFire(game.players['enemy'].x,game.players['enemy'].y);
+		game.players['lplayer'].checkFire(game.players['rplayer'].sprite.x,game.players['rplayer'].sprite.y);
+		game.players['rplayer'].checkFire(game.players['lplayer'].sprite.x,game.players['lplayer'].sprite.y);
 
+		if(this.v.isDown){
+			console.log(game.players['lplayer'].sprite.x,game.players['lplayer'].sprite.y);
+			console.log(game.players['rplayer'].sprite.x,game.players['rplayer'].sprite.y);
+			console.log(game.players['lplayer']);
+			console.log(game.players['rplayer']);
+		}
+
+		this.game.physics.arcade.collide(game.players['lplayer'].sprite, game.players['rplayer'].fire_ball, this.callback);
+		this.game.physics.arcade.collide(game.players['rplayer'].sprite, game.players['lplayer'].fire_ball, this.callback);
 	},
 
 
@@ -44,9 +57,23 @@ var level_01 = {
 
 	},
 
+	callback: function(player,fireball){
+		player.health--;
+		console.log(player.health);
+		console.log(fireball);
+		if(fireball.name.includes("right")){
+			game.players['lplayer'].scoreHit();
+		}else{
+			game.players['rplayer'].scoreHit();
+		}
+
+		fireball.kill();
+	},
+
 	render: function(){
 		//game.debug.bodyInfo(this.fire_ball, 16, 24);
 		// Instructions:
-		game.debug.text( "Press F to fire the fireball.", game.width/2, game.height-10 );
+		game.debug.text( "Left Player: S=up,X=down,F=fire.                          Right Player:Larrow=Fire,Uarrow=up,Darrow=down. ", 
+		20, game.height-10 );
 	}
 }
