@@ -1,47 +1,75 @@
-var game = new Phaser.Game(1800, 1400, Phaser.AUTO, '', {
-    preload: preload,
-    create: create,
-    update: update,
-    render: render
-});
-var map;
-var layers = [];
-var player;
+game.load.image("brown","../tileset/ground/brown.png");
+game.load.image("skull_dark","../tileset/item/corpse/skull_dark.png");
+game.load.image("grey_stone","../tileset/item/statue/grey_stone.png");
+game.load.image("eye","../tileset/ground/eye.png");
+game.load.image("dark_stairs","../tileset/building/stairs/dark_stairs.png");
+game.load.image("portal","../tileset/logic/portal.png");
+game.load.image("collision","../tileset/logic/collision.png");
+game.load.image("enormous_creature","../tileset/logic/creature/enormous_creature.png");
+game.load.image("demon","../tileset/logic/creature/demon.png");
+game.load.image("elemental","../tileset/logic/creature/elemental.png");
+game.load.image("undead","../tileset/logic/creature/undead.png");
+game.load.image("human","../tileset/logic/creature/human.png");
+game.load.image("iron_lamp","../tileset/furniture/light/iron_lamp.png");
+game.load.image("flames","../tileset/furniture/light/flames.png");
+game.load.image("skeleton","../tileset/item/corpse/skeleton.png");
+game.load.image("metal_and_stone","../tileset/item/statue/metal_and_stone.png");
+game.load.image("floor_stains_2","../tileset/item/blood/floor_stains_2.png");
+game.load.image("floor_stain","../tileset/item/blood/floor_stain.png");
+game.load.image("nsew_stains","../tileset/item/blood/nsew_stains.png");
+game.load.image("int_rock","../tileset/building/wall/int_rock.png");
+game.load.image("brown_edges","../tileset/ground/brown_edges.png");
+game.load.image("tan_building","../tileset/building/tan_building.png");
+game.load.image("sand_1","../tileset/ground/sand_1.png");
+game.load.image("sand_2","../tileset/ground/sand_2.png");
+game.load.image("brown_corners","../tileset/ground/brown_corners.png");
+game.load.image("window_centered","../tileset/building/window/window_centered.png");
+game.load.image("closed","../tileset/building/door/closed.png");
+game.load.image("door","../tileset/building/door/door.png");
+game.load.image("large_green","../tileset/plant/bush/large_green.png");
+game.load.image("dim_yellow_light_7x5","../tileset/light/dim_yellow_light_7x5.png");
+game.load.image("dim_yellow_light_5x5","../tileset/light/dim_yellow_light_5x5.png");
 
-function preload() {
-    game.load.tilemap('LevelOne', 'TileMaps/Tutorial.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('Background', 'Assets/Background.png');
-    game.load.image('InterImages', 'Assets/InterImages.png');
-    game.load.spritesheet('MainCharacter', 'Assets/MainCharacter.png', 60, 80, 33);
-    game.load.spritesheet('StandardEnemyFull', 'Assets/StandardEnemyFull.png');
-}
+game.load.image("brown","../tileset/ground/brown.png");
+game.load.image("skull_dark","../tileset/item/corpse/skull_dark.png");
+game.load.image("grey_stone","../tileset/item/statue/grey_stone.png");
+game.load.image("eye","../tileset/ground/eye.png");
+game.load.image("dark_stairs","../tileset/building/stairs/dark_stairs.png");
+game.load.image("portal","../tileset/logic/portal.png");
+game.load.image("collision","../tileset/logic/collision.png");
+game.load.image("enormous_creature","../tileset/logic/creature/enormous_creature.png");
+game.load.image("demon","../tileset/logic/creature/demon.png");
+game.load.image("elemental","../tileset/logic/creature/elemental.png");
+game.load.image("undead","../tileset/logic/creature/undead.png");
+game.load.image("human","../tileset/logic/creature/human.png");
+game.load.image("iron_lamp","../tileset/furniture/light/iron_lamp.png");
+game.load.image("flames","../tileset/furniture/light/flames.png");
+game.load.image("skeleton","../tileset/item/corpse/skeleton.png");
+game.load.image("metal_and_stone","../tileset/item/statue/metal_and_stone.png");
+game.load.image("floor_stains_2","../tileset/item/blood/floor_stains_2.png");
+game.load.image("floor_stain","../tileset/item/blood/floor_stain.png");
+game.load.image("nsew_stains","../tileset/item/blood/nsew_stains.png");
+game.load.image("int_rock","../tileset/building/wall/int_rock.png");
+game.load.image("brown_edges","../tileset/ground/brown_edges.png");
+game.load.image("tan_building","../tileset/building/tan_building.png");
+game.load.image("sand_1","../tileset/ground/sand_1.png");
+game.load.image("sand_2","../tileset/ground/sand_2.png");
+game.load.image("brown_corners","../tileset/ground/brown_corners.png");
+game.load.image("window_centered","../tileset/building/window/window_centered.png");
+game.load.image("closed","../tileset/building/door/closed.png");
+game.load.image("door","../tileset/building/door/door.png");
+game.load.image("large_green","../tileset/plant/bush/large_green.png");
+game.load.image("dim_yellow_light_7x5","../tileset/light/dim_yellow_light_7x5.png");
+game.load.image("dim_yellow_light_5x5","../tileset/light/dim_yellow_light_5x5.png");
 
-function create() {
-    //add tilemap, images and create layers, resize world    
-    map = game.add.tilemap('LevelOne');
-    map.addTilesetImage('Background', 'Background');
-    map.addTilesetImage('Interaction', 'InterImages');
-    layers[3] = map.createLayer('Scenery');
-    layers[2] = map.createLayer('Activates');
-    layers[1] = map.createLayer('Floor');
-    //call in physics and assigns gravity    
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.physics.arcade.gravity.y = 900; //assign physics to the layer 'floor'    
-    game.physics.arcade.enable(layers[3]);
-    map.setCollisionBetween(128, 131, true, layers[3]);
-    map.setCollisionBetween(148, 151, true, layers[3]);
-    map.setCollisionBetween(168, 171, true, layers[3]);
-    map.setCollisionBetween(188, 191, true, layers[3]);
-    map.setCollisionBetween(208, 211, true, layers[3]);
-    map.setCollisionBetween(228, 231, true, layers[3]);
-    map.setCollisionBetween(248, 251, true, layers[3]);
-    //add player and enable player physics. Ensure player collides with wall    
-    player = game.add.sprite(1040, 1300, 'MainCharacter');
-    player.anchor.x = player.anchor.y = 0.5;
-    game.physics.arcade.enable(player);
-    player.body.collideWorldBounds = true;
-}
+ <layer name="0_floor" width="128" height="128" visible="0">
+ <layer name="1_terrain" width="128" height="128" visible="0">
+ <layer name="2_object" width="128" height="128" visible="0">
+ <layer name="3_roof" width="128" height="128" visible="0">
+ <layer name="4_roof_add" width="128" height="128" visible="0">
+ <layer name="objects" width="128" height="128">
+ <layer name="collision" width="128" height="128" visible="0" opacity="0.37">
+ <layer name="protection" width="128" height="128" visible="0">
+ <layer name="blend_ground" width="128" height="128" visible="0" opacity="0.56">
+ <layer name="blend_roof" width="128" height="128" visible="0" opacity="0.28">
 
-function update() {
-    game.physics.arcade.collide(player, layers[3]);
-}

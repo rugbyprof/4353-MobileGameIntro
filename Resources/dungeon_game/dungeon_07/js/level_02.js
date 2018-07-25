@@ -12,7 +12,6 @@ var level_02 = {
 		game.load.image('amazon', 'assets/tileset/logic/creature/amazon.png');
 		game.load.image('skull_dark', 'assets/tileset/item/corpse/skull_dark.png');
 		game.load.image('huge_animal_corpse', 'assets/tileset/item/corpse/huge_animal.png');
-
 		game.load.image('pink_crystal', 'assets/tileset/ground/rock/pink_crystal.png');
 		game.load.image('green_crystal', 'assets/tileset/ground/rock/green_crystal.png');
 		game.load.image('animal', 'assets/tileset/logic/creature/animal.png');
@@ -26,7 +25,6 @@ var level_02 = {
 		game.load.image('broken_green_column', 'assets/tileset/item/statue/broken_green_column.png');
 		game.load.image('skeleton', 'assets/tileset/item/corpse/skeleton.png');
 		game.load.image('giant_human', 'assets/tileset/logic/creature/giant_human.png');
-		//game.load.image('huge_animal_creature', 'assets/tileset/logic/creature/huge_animal.png');
 		game.load.image('mutant', 'assets/tileset/logic/creature/mutant.png');
 		game.load.image('dark_stairs', 'assets/tileset/building/stairs/dark_stairs.png');
 		game.load.image('floor_tiles', 'assets/tileset/ground/indoor/floor_tiles.png');

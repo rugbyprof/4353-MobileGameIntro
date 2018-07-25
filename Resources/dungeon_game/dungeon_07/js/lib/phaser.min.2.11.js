@@ -108139,9 +108139,9 @@ Phaser.Tileset.prototype = {
     */
     draw: function (context, x, y, index)
     {
-
         //  Correct the tile index for the set and bias for interlacing
         var coordIndex = (index - this.firstgid) << 1;
+
 
         if (coordIndex >= 0 && (coordIndex + 1) < this.drawCoords.length)
         {

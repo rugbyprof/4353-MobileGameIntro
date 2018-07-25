@@ -30,6 +30,7 @@ function Player(game_copy) {
         this.sprite.animations.add('walk_right', Phaser.Animation.generateFrameNames('Walk_right', 0, 8), 20, true);
         this.sprite.animations.add('idle_left', Phaser.Animation.generateFrameNames('Idle_left', 0, 9), 20, true);
         this.sprite.animations.add('idle_right', Phaser.Animation.generateFrameNames('Idle_right', 0, 9), 20, true);
+        this.sprite.animations.add('jump_right', Phaser.Animation.generateFrameNames('Jump_right', 0, 9), 20, true);
         this.die = this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('Dead', 1, 10), 20, false);
 
         if (this.sprite.x > game.width / 2) {
@@ -56,6 +57,9 @@ function Player(game_copy) {
         this.fire_ball.enableBody = true;
         this.fire_ball.physicsBodyType = Phaser.Physics.ARCADE;
 
+
+        
+
         for (var i = 0; i < 5; i++) {
             var f = this.fire_ball.create(0, 0, 'fire_ball');
             f.name = 'fire_ball-' + this.side + '-' + i;
@@ -70,17 +74,17 @@ function Player(game_copy) {
             this.barxoffset = 0;
             //  This adjusts the collision body size to be a 100x50 box.
             //  50, 25 is the X and Y offset of the newly sized box.
-            this.sprite.body.setSize(30, 30, 20, 0);
+            this.sprite.body.setSize(60, 60, 0, 0);
         } else {
             this.barxoffset = 0;
-            this.sprite.body.setSize(30, 30, -20, 0);
+            this.sprite.body.setSize(60, 60, 0, 0);
         }
 
         this.baryoffset = 35;
 
         this.barConfig = {
             width: 50,
-            height: 8,
+            height: 4,
             x: (this.sprite.x + this.barxoffset),
             y: (this.sprite.y + this.baryoffset),
             bg: {
@@ -94,6 +98,8 @@ function Player(game_copy) {
         };
         this.myHealthBar = new HealthBar(game, this.barConfig);
 
+        this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+
     };
 
     this.assignKeys = function (downKey, upKey, fireKey) {
@@ -104,6 +110,11 @@ function Player(game_copy) {
 
     this.move = function () {
         if (!this.dead) {
+
+            if(this.spaceBar.isDown){
+                console.log("jump")
+                this.sprite.animations.play('jump_right');
+            }
             if (this.upKey.isDown) {
                 if (this.prevDir == 'left') {
                     this.sprite.animations.play('walk_left');
@@ -125,8 +136,10 @@ function Player(game_copy) {
             if (!this.upKey.isDown && !this.downKey.isDown) {
                 if (this.prevDir == 'left') {
                     this.sprite.animations.play('idle_left');
+
                 } else {
                     this.sprite.animations.play('idle_right');
+
                 }
                 this.sprite.body.velocity.x = 0;
                 this.sprite.body.velocity.y = 0;
@@ -139,7 +152,8 @@ function Player(game_copy) {
     };
 
     this.checkFire = function (x, y) {
-        if (this.fireKey.justPressed(1)) {
+        if (this.fireKey.justPressed()) {
+            console.log("fire!!")
             this.fireWeapon(x, y);
         }
     };

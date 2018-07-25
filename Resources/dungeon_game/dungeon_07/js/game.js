@@ -1,5 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.Canvas, "game");
-
+var game = new Phaser.Game(1024, 768, Phaser.Canvas, "game");
 
 game.global = {
     title: "Scary Dungeon",
@@ -7,7 +6,7 @@ game.global = {
 	best_score: 0,
     level:1,
     backgroundColor:"#000000",
-    current_level: "level_01"
+    current_level: "level_02"
 }
 
 game.state.add("boot", boot);
@@ -15,6 +14,9 @@ game.state.add("preLoad", preLoad);
 game.state.add("mainMenu", mainMenu);
 game.state.add("level_01", level_01);
 game.state.add("level_02", level_02);
+game.state.add("level_03", level_03);
+game.state.add("level_04", level_04);
+game.state.add("level_05", level_05);
 game.state.add("gameOver", gameOver);
 game.state.start("boot");
 
