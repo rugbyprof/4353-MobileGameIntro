@@ -7,6 +7,7 @@ function Player(game_copy) {
 
     this.preload = function () {
         game.load.atlas('knight_atlas', 'assets/sprites/knight_atlas.png', 'assets/sprites/knight_atlas.json');
+        game.load.spritesheet('smoke', 'assets/images/smoke_particle.png', 13, 13);
     };
 
     this.create = function (x, y, atlas) {
@@ -32,8 +33,8 @@ function Player(game_copy) {
         this.duck = this.sprite.animations.add('duck', Phaser.Animation.generateFrameNames('Dead', 1, 10), 100, false);
         this.idle_left = this.sprite.animations.add('idle_left', Phaser.Animation.generateFrameNames('Idle_left', 0, 9), 20, true);
         this.idle_right = this.sprite.animations.add('idle_right', Phaser.Animation.generateFrameNames('Idle_right', 0, 9), 20, true);
-        this.jump_right = this.sprite.animations.add('jump_right', Phaser.Animation.generateFrameNames('Jump_right', 0, 9), 20, false);
-        this.jump_left = this.sprite.animations.add('jump_left', Phaser.Animation.generateFrameNames('Jump_left', 0, 9), 20, false);
+        this.jump_right = this.sprite.animations.add('jump_right', Phaser.Animation.generateFrameNames('Jump_right', 0, 9), 60, false);
+        this.jump_left = this.sprite.animations.add('jump_left', Phaser.Animation.generateFrameNames('Jump_left', 0, 9), 60, false);
         this.attack_right = this.sprite.animations.add('attack_right', Phaser.Animation.generateFrameNames('Attack_right', 0, 9), 20, true);
         this.attack_left = this.sprite.animations.add('attack_left', Phaser.Animation.generateFrameNames('Attack_left', 0, 9), 20, true);
         this.die = this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('Dead', 1, 10), 20, false);
@@ -106,6 +107,29 @@ function Player(game_copy) {
         this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.duck = game.input.keyboard.addKey(Phaser.Keyboard.D)
 
+
+		/////////////////////////////////
+		this.emitter = game.add.emitter(this.sprite.x + this.sprite.width / 2  , this.sprite.y);
+		console.log(game.players['lplayer'].sprite);
+
+		this.emitter.width = this.sprite.width / 2;
+		// emitter.angle = 30; // uncomment to set an angle for the rain.
+	
+		this.emitter.makeParticles('smoke');
+	
+		this.emitter.minParticleScale = 0.1;
+		this.emitter.maxParticleScale = 0.5;
+	
+		this.emitter.setYSpeed(-100, -200);
+		this.emitter.setXSpeed(-5, 5);
+	
+		this.emitter.minRotation = 0;
+		this.emitter.maxRotation = 0;
+
+        //explode, lifespan, frequency,quantity
+		this.emitter.start(false, 500, 5, 0);
+		/////////////////////////////////
+
     };
 
     this.assignKeys = function (downKey, upKey, fireKey) {
@@ -132,9 +156,9 @@ function Player(game_copy) {
                 this.busy = true;
                 
                 if (this.prevDir == 'left') {
-                    this.playAnimation('jump_left',this.notBusy);
+                    this.jump('jump_left')
                 } else {
-                    this.playAnimation('jump_right',this.notBusy);
+                    this.jump('jump_right');
                 }
         
             }
@@ -203,6 +227,17 @@ function Player(game_copy) {
         //}
     };
 
+
+
+    this.jump = function(direction){
+        this.busy = true;
+        this.sprite.y -=20;
+        this.playAnimation(direction,this.notBusy);
+        game.time.events.add(Phaser.Timer.SECOND * .2, function(){
+            this.sprite.y += 20;
+        }, this);
+    }
+
     this.playAnimation = function (animation,callback){
         this.sprite.animations.play(animation);
         
@@ -212,24 +247,18 @@ function Player(game_copy) {
         
     };
 
-    this.jump = function(){
 
-    
-        var bounce=game.add.tween(this.sprite);
-    
-        bounce.to({ y: this.sprite.y-20 }, 0, Phaser.Easing.Bounce.In);
-        bounce.start();
-    
-    }
-
-    this.notBusy = function(context){
-        console.log("callback");
-        context.busy = false;
+    this.notBusy = function(){
+        console.log("notBusy");
+        this.busy = false;
     };
 
     this.scoreHit = function () {
         console.log("score hit")
+        smoke = 100 - ((this.sprite.health / 10) * 100);
         this.myHealthBar.setPercent((this.sprite.health / 10) * 100);
+
+        this.emitter.start(false, 500, 5, 0);
         if ((this.sprite.health / 10 * 100) <= 0) {
             this.sprite.play('die');
             this.die.onComplete.add(function(){
