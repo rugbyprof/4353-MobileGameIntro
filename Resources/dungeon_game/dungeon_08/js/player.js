@@ -14,6 +14,7 @@ function Player(game_copy) {
         this.y = y;
         this.bulletTime = 0;
         this.dead = false;
+        this.busy = false;
 
         // Adding the knight atlas that contains all the animations
         this.sprite = game.add.sprite(this.x, this.y, atlas);
@@ -26,11 +27,15 @@ function Player(game_copy) {
         this.sprite.health = 10;
 
         // Add walking and idle animations. Different aninmations are needed based on direction of movement.
-        this.sprite.animations.add('walk_left', Phaser.Animation.generateFrameNames('Walk_left', 0, 8), 20, true);
-        this.sprite.animations.add('walk_right', Phaser.Animation.generateFrameNames('Walk_right', 0, 8), 20, true);
-        this.sprite.animations.add('idle_left', Phaser.Animation.generateFrameNames('Idle_left', 0, 9), 20, true);
-        this.sprite.animations.add('idle_right', Phaser.Animation.generateFrameNames('Idle_right', 0, 9), 20, true);
-        this.sprite.animations.add('jump_right', Phaser.Animation.generateFrameNames('Jump_right', 0, 9), 20, true);
+        this.walk_left = this.sprite.animations.add('walk_left', Phaser.Animation.generateFrameNames('Walk_left', 0, 8), 20, true);
+        this.walk_right = this.sprite.animations.add('walk_right', Phaser.Animation.generateFrameNames('Walk_right', 0, 8), 20, true);
+        this.duck = this.sprite.animations.add('duck', Phaser.Animation.generateFrameNames('Dead', 1, 10), 100, false);
+        this.idle_left = this.sprite.animations.add('idle_left', Phaser.Animation.generateFrameNames('Idle_left', 0, 9), 20, true);
+        this.idle_right = this.sprite.animations.add('idle_right', Phaser.Animation.generateFrameNames('Idle_right', 0, 9), 20, true);
+        this.jump_right = this.sprite.animations.add('jump_right', Phaser.Animation.generateFrameNames('Jump_right', 0, 9), 20, false);
+        this.jump_left = this.sprite.animations.add('jump_left', Phaser.Animation.generateFrameNames('Jump_left', 0, 9), 20, false);
+        this.attack_right = this.sprite.animations.add('attack_right', Phaser.Animation.generateFrameNames('Attack_right', 0, 9), 20, true);
+        this.attack_left = this.sprite.animations.add('attack_left', Phaser.Animation.generateFrameNames('Attack_left', 0, 9), 20, true);
         this.die = this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('Dead', 1, 10), 20, false);
 
         if (this.sprite.x > game.width / 2) {
@@ -98,7 +103,8 @@ function Player(game_copy) {
         };
         this.myHealthBar = new HealthBar(game, this.barConfig);
 
-        this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+        this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.duck = game.input.keyboard.addKey(Phaser.Keyboard.D)
 
     };
 
@@ -111,11 +117,28 @@ function Player(game_copy) {
     this.move = function () {
         if (!this.dead) {
 
-            if(this.spaceBar.isDown){
-                console.log("jump")
-                this.sprite.animations.play('jump_right');
+            if(this.duck.justPressed()){
+                this.busy = true;
+                
+                if (this.prevDir == 'left') {
+                    this.playAnimation('duck',this.notBusy);
+                } else {
+                    this.playAnimation('duck',this.notBusy);
+                }
+        
             }
-            if (this.upKey.isDown) {
+
+            if(this.spaceBar.justPressed()){
+                this.busy = true;
+                
+                if (this.prevDir == 'left') {
+                    this.playAnimation('jump_left',this.notBusy);
+                } else {
+                    this.playAnimation('jump_right',this.notBusy);
+                }
+        
+            }
+            if (!this.busy && this.upKey.isDown) {
                 if (this.prevDir == 'left') {
                     this.sprite.animations.play('walk_left');
                 } else {
@@ -124,7 +147,7 @@ function Player(game_copy) {
                 this.sprite.body.velocity.y = -200;
             }
 
-            if (this.downKey.isDown) {
+            if (!this.busy && this.downKey.isDown) {
                 if (this.prevDir == 'left') {
                     this.sprite.animations.play('walk_left');
                 } else {
@@ -133,7 +156,7 @@ function Player(game_copy) {
                 this.sprite.body.velocity.y = 200;
             }
 
-            if (!this.upKey.isDown && !this.downKey.isDown) {
+            if (!this.busy && !this.upKey.isDown && !this.downKey.isDown) {
                 if (this.prevDir == 'left') {
                     this.sprite.animations.play('idle_left');
 
@@ -144,6 +167,7 @@ function Player(game_copy) {
                 this.sprite.body.velocity.x = 0;
                 this.sprite.body.velocity.y = 0;
             }
+
             this.myHealthBar.setPosition(this.sprite.x + this.barxoffset, this.sprite.y - this.baryoffset);
         }else{
             this.sprite.body.velocity.x = 0;
@@ -179,6 +203,30 @@ function Player(game_copy) {
         //}
     };
 
+    this.playAnimation = function (animation,callback){
+        this.sprite.animations.play(animation);
+        
+        this.sprite.animations.currentAnim.onComplete.add(function () {	
+            callback(this);
+        },this);
+        
+    };
+
+    this.jump = function(){
+
+    
+        var bounce=game.add.tween(this.sprite);
+    
+        bounce.to({ y: this.sprite.y-20 }, 0, Phaser.Easing.Bounce.In);
+        bounce.start();
+    
+    }
+
+    this.notBusy = function(context){
+        console.log("callback");
+        context.busy = false;
+    };
+
     this.scoreHit = function () {
         console.log("score hit")
         this.myHealthBar.setPercent((this.sprite.health / 10) * 100);
@@ -192,7 +240,7 @@ function Player(game_copy) {
             this.deathFire.y = this.sprite.y-10;
             this.dead = true;
         }
-    }
+    };
 
     this.resetFireBall = function (fireBall) {
         fireBall.kill();
