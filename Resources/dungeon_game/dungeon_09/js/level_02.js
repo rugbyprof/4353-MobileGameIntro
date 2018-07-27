@@ -212,6 +212,7 @@ var level_02 = {
 			}
 		}
 
+		//
 		if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown) {
 			if (this.prevDir == 'left') {
 				this.player.animations.play('idle_left');
@@ -222,6 +223,7 @@ var level_02 = {
 			this.player.body.velocity.y = 0;
 		}
 
+		// Did player overlap with portal
 		if (this.isOverlapped(this.player, this.portal)) {
 			this.transportPlayer(this.portal.x, this.portal.y, 1568, 1760);
 		}
@@ -265,7 +267,8 @@ var level_02 = {
 	},
 
 	/**
-	 * This method returns true or false depending on which tile was stepped on
+	 * This method returns true or false depending on which tile was stepped on.
+	 * Similar to function 'getTileProperties' but expects a tile index.
 	 * @param: layer (phaser layer name)
 	 * @param: player (phaser sprite)
 	 * @param: index (index of tile stepped on)

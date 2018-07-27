@@ -12,11 +12,7 @@ game.global = {
 game.state.add("boot", boot);
 game.state.add("preLoad", preLoad);
 game.state.add("mainMenu", mainMenu);
-game.state.add("level_01", level_01);
 game.state.add("level_02", level_02);
-game.state.add("level_03", level_03);
-game.state.add("level_04", level_04);
-game.state.add("level_05", level_05);
 game.state.add("gameOver", gameOver);
 game.state.start("boot");
 
