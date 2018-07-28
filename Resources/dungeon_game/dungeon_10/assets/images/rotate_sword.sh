@@ -1,0 +1,11 @@
+convert -background 'rgba(0,0,0,0)' -rotate 30  sword_1.png sword_1-1.png
+convert -background 'rgba(0,0,0,0)' -rotate 60  sword_1.png sword_1-2.png
+convert -background 'rgba(0,0,0,0)' -rotate 90  sword_1.png sword_1-3.png
+convert -background 'rgba(0,0,0,0)' -rotate 120  sword_1.png sword_1-4.png
+convert -background 'rgba(0,0,0,0)' -rotate 150  sword_1.png sword_1-5.png
+convert -background 'rgba(0,0,0,0)' -rotate 180  sword_1.png sword_1-6.png
+convert -background 'rgba(0,0,0,0)' -rotate 210  sword_1.png sword_1-7.png
+convert -background 'rgba(0,0,0,0)' -rotate 240  sword_1.png sword_1-8.png
+convert -background 'rgba(0,0,0,0)' -rotate 270  sword_1.png sword_1-9.png
+convert -background 'rgba(0,0,0,0)' -rotate 300  sword_1.png sword_1-10.png
+convert -background 'rgba(0,0,0,0)' -rotate 330  sword_1.png sword_1-11.png

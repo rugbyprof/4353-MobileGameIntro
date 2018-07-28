@@ -8,6 +8,7 @@ function Player(game_copy) {
     this.preload = function () {
         game.load.atlas('knight_atlas', 'assets/sprites/knight_atlas.png', 'assets/sprites/knight_atlas.json');
         game.load.spritesheet('smoke', 'assets/images/smoke_particle.png', 13, 13);
+        //game.load.spritesheet('smoke2', 'assets/images/smoke_particle2.png', 13, 13);
     };
 
     this.create = function (x, y, atlas) {
@@ -17,10 +18,12 @@ function Player(game_copy) {
         this.dead = false;
         this.busy = false;
 
+        this.emitter = null;
+
         // Adding the knight atlas that contains all the animations
         this.sprite = game.add.sprite(this.x, this.y, atlas);
 
-        this.deathFire = game.add.sprite(0,0,'death_fire');
+        this.deathFire = game.add.sprite(0, 0, 'death_fire');
         this.deathFire.animations.add('fry');
         this.deathFire.alpha = 0;
         this.deathFire.anchor.setTo(0.5);
@@ -64,8 +67,6 @@ function Player(game_copy) {
         this.fire_ball.physicsBodyType = Phaser.Physics.ARCADE;
 
 
-        
-
         for (var i = 0; i < 5; i++) {
             var f = this.fire_ball.create(0, 0, 'fire_ball');
             f.name = 'fire_ball-' + this.side + '-' + i;
@@ -86,7 +87,7 @@ function Player(game_copy) {
             this.sprite.body.setSize(60, 60, 0, 0);
         }
 
-        this.baryoffset = 35;
+        this.baryoffset = -35;
 
         this.barConfig = {
             width: 50,
@@ -105,12 +106,12 @@ function Player(game_copy) {
         this.myHealthBar = new HealthBar(game, this.barConfig);
 
         this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        this.duck = game.input.keyboard.addKey(Phaser.Keyboard.D)
+        this.duck = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
 
+     
 		/////////////////////////////////
-		this.emitter = game.add.emitter(this.sprite.x + this.sprite.width / 2  , this.sprite.y);
-		console.log(game.players['lplayer'].sprite);
+		this.emitter = game.add.emitter(this.sprite.x + this.sprite.width / 2  , this.sprite.y,1);
 
 		this.emitter.width = this.sprite.width / 2;
 		// emitter.angle = 30; // uncomment to set an angle for the rain.
@@ -127,7 +128,7 @@ function Player(game_copy) {
 		this.emitter.maxRotation = 0;
 
         //explode, lifespan, frequency,quantity
-		this.emitter.start(false, 500, 5, 0);
+		this.emitter.start(false, 1, 100000, 1);
 		/////////////////////////////////
 
     };
@@ -141,26 +142,26 @@ function Player(game_copy) {
     this.move = function () {
         if (!this.dead) {
 
-            if(this.duck.justPressed()){
+            if (this.duck.justPressed()) {
                 this.busy = true;
-                
+
                 if (this.prevDir == 'left') {
-                    this.playAnimation('duck',this.notBusy);
+                    this.playAnimation('duck', this.notBusy);
                 } else {
-                    this.playAnimation('duck',this.notBusy);
+                    this.playAnimation('duck', this.notBusy);
                 }
-        
+
             }
 
-            if(this.spaceBar.justPressed()){
+            if (this.spaceBar.justPressed()) {
                 this.busy = true;
-                
+
                 if (this.prevDir == 'left') {
                     this.jump('jump_left')
                 } else {
                     this.jump('jump_right');
                 }
-        
+
             }
             if (!this.busy && this.upKey.isDown) {
                 if (this.prevDir == 'left') {
@@ -193,7 +194,9 @@ function Player(game_copy) {
             }
 
             this.myHealthBar.setPosition(this.sprite.x + this.barxoffset, this.sprite.y - this.baryoffset);
-        }else{
+            this.emitter.emitX = this.sprite.x;
+            this.emitter.emitY = this.sprite.y;
+        } else {
             this.sprite.body.velocity.x = 0;
             this.sprite.body.velocity.y = 0;
         }
@@ -240,11 +243,11 @@ function Player(game_copy) {
 
     this.playAnimation = function (animation,callback){
         this.sprite.animations.play(animation);
-        
-        this.sprite.animations.currentAnim.onComplete.add(function () {	
+
+        this.sprite.animations.currentAnim.onComplete.add(function () {
             callback(this);
-        },this);
-        
+        }, this);
+
     };
 
 
@@ -258,17 +261,27 @@ function Player(game_copy) {
         smoke = 100 - ((this.sprite.health / 10) * 100);
         this.myHealthBar.setPercent((this.sprite.health / 10) * 100);
 
-        this.emitter.start(false, 500, 5, 0);
+        //this.emitter.start(false, 500, 5, 0);
         if ((this.sprite.health / 10 * 100) <= 0) {
             this.sprite.play('die');
-            this.die.onComplete.add(function(){
+            this.die.onComplete.add(function () {
                 this.deathFire.animations.play('fry', 30, true);
             }, this);
             this.deathFire.alpha = 1;
             this.deathFire.x = this.sprite.x;
-            this.deathFire.y = this.sprite.y-10;
+            this.deathFire.y = this.sprite.y - 10;
             this.dead = true;
         }
+        if(this.sprite.health == 10){
+            frequency = 100000;
+            duration = 0;
+        }else{
+            frequency = this.sprite.health*15;
+            duration = (10 - this.sprite.health) * 100;
+        }
+        console.log(frequency,duration);
+        //this.addSmoke(this.emitter,frequency,duration)
+        this.emitter.flow(200, 100, 1, -1, true);
     };
 
     this.resetFireBall = function (fireBall) {
@@ -283,4 +296,37 @@ function Player(game_copy) {
         return Phaser.Rectangle.intersects(boundsA, boundsB);
 
     };
+
+    this.addSmoke = function (emitter,frequency,duration) {
+        // console.log(typeof(emitter))
+        // if(typeof (emitter) === 'object'){
+        //     console.log("destroying emitter")
+        //     if(!emitter == null){
+        //         emitter.destroy();
+        //     }
+        // }
+        // // x coord , y coord, optional max num of items
+        // emitter = game.add.emitter(this.sprite.x, this.sprite.y-20,1000);
+
+        // console.log(this.sprite.x);
+
+        // emitter.width = this.sprite.width / 4;
+        // // this.emitter.angle = 30; // uncomment to set an angle for the rain.
+
+        // emitter.makeParticles('smoke');
+
+        // emitter.minParticleScale = 0.1;
+        // emitter.maxParticleScale = 0.5;
+
+        // emitter.setYSpeed(-100, -200);
+        // emitter.setXSpeed(-5, 5);
+
+        // emitter.minRotation = 0;
+        // emitter.maxRotation = 0;
+
+        //emitter.start(false, duration, frequency, 0);
+        //emitter.makeParticles('smoke');
+
+
+    }
 };
