@@ -27,6 +27,7 @@ var preLoad = {
 		game.load.atlas('red_portal', 'assets/sprites/red_portal.png', 'assets/sprites/red_portal.json');
 		game.load.spritesheet('portal_smoke', 'assets/sprites/smoke.png', 128, 128);
 		game.load.spritesheet('ghosts', 'assets/sprites/pacman_ghosts.png', 116, 116);
+		game.load.spritesheet('swords', 'assets/sprites/sword_sheet.png', 200, 200);
 		
 		// load audio here: 
 		//game.load.audio('audiokey1', 'path/to/sounds/one.mp3')
