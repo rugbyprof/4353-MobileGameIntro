@@ -10,7 +10,7 @@ function Player(game_copy) {
         game.load.spritesheet('smoke', 'assets/images/smoke_particle.png', 13, 13);
     };
 
-    this.create = function (x, y, atlas) {
+    this.createPlayer = function (x, y, atlas) {
         this.x = x;
         this.y = y;
         this.bulletTime = 0;
@@ -32,33 +32,20 @@ function Player(game_copy) {
         // Add walking and idle animations. Different aninmations are needed based on direction of movement.
         this.walk_left = this.sprite.animations.add('walk_left', Phaser.Animation.generateFrameNames('Walk_left', 0, 8), 20, true);
         this.walk_right = this.sprite.animations.add('walk_right', Phaser.Animation.generateFrameNames('Walk_right', 0, 8), 20, true);
-        this.duck = this.sprite.animations.add('duck', Phaser.Animation.generateFrameNames('Dead', 1, 10), 100, false);
         this.idle_left = this.sprite.animations.add('idle_left', Phaser.Animation.generateFrameNames('Idle_left', 0, 9), 20, true);
         this.idle_right = this.sprite.animations.add('idle_right', Phaser.Animation.generateFrameNames('Idle_right', 0, 9), 20, true);
         this.jump_right = this.sprite.animations.add('jump_right', Phaser.Animation.generateFrameNames('Jump_right', 0, 9), 60, false);
         this.jump_left = this.sprite.animations.add('jump_left', Phaser.Animation.generateFrameNames('Jump_left', 0, 9), 60, false);
-        this.attack_right = this.sprite.animations.add('attack_right', Phaser.Animation.generateFrameNames('Attack_right', 0, 9), 20, true);
-        this.attack_left = this.sprite.animations.add('attack_left', Phaser.Animation.generateFrameNames('Attack_left', 0, 9), 20, true);
+        this.attack_right = this.sprite.animations.add('attack_right', Phaser.Animation.generateFrameNames('Attack_right', 0, 9), 20, false);
+        this.attack_left = this.sprite.animations.add('attack_left', Phaser.Animation.generateFrameNames('Attack_left', 0, 9), 20, false);
         this.die = this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('Dead', 1, 10), 20, false);
-
-        if (this.sprite.x > game.width / 2) {
-            console.log("right");
-            this.prevDir = 'left';
-            this.side = 'right';
-        } else {
-            console.log("left");
-            this.prevDir = 'right';
-            this.side = 'left';
-        }
-
+        this.sprite.data['direction'] = 'idle_left';
         this.sprite.anchor.setTo(0.5);
-
         game.physics.arcade.enable(this.sprite);
 
         // tell camera to follow sprite now that we're on a map
         // and can move out of bounds
-        //game.camera.follow(this.sprite);
-
+        game.camera.follow(this.sprite);
         this.sprite.body.collideWorldBounds = true;
 
         this.fire_ball = game.add.group();
@@ -105,92 +92,94 @@ function Player(game_copy) {
         this.myHealthBar = new HealthBar(game, this.barConfig);
 
         this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        this.duck = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
 
-     
-		/////////////////////////////////
-		this.emitter = game.add.emitter(this.sprite.x + this.sprite.width / 2  , this.sprite.y,1);
 
-		this.emitter.width = this.sprite.width / 2;
-		// emitter.angle = 30; // uncomment to set an angle for the rain.
-	
-		this.emitter.makeParticles('smoke');
-	
-		this.emitter.minParticleScale = 0.1;
-		this.emitter.maxParticleScale = 0.5;
-	
-		this.emitter.setYSpeed(-100, -200);
-		this.emitter.setXSpeed(-5, 5);
-	
-		this.emitter.minRotation = 0;
-		this.emitter.maxRotation = 0;
+        /////////////////////////////////
+        this.emitter = game.add.emitter(this.sprite.x + this.sprite.width / 2, this.sprite.y, 1);
+
+        this.emitter.width = this.sprite.width / 2;
+        // emitter.angle = 30; // uncomment to set an angle for the rain.
+
+        this.emitter.makeParticles('smoke');
+
+        this.emitter.minParticleScale = 0.1;
+        this.emitter.maxParticleScale = 0.5;
+
+        this.emitter.setYSpeed(-100, -200);
+        this.emitter.setXSpeed(-5, 5);
+
+        this.emitter.minRotation = 0;
+        this.emitter.maxRotation = 0;
 
         //explode, lifespan, frequency,quantity
-		this.emitter.start(false, 1, 100000, 1);
-		/////////////////////////////////
+        this.emitter.start(false, 1, 100000, 1);
+        /////////////////////////////////
 
     };
-
-    this.assignKeys = function (downKey, upKey, fireKey) {
-        this.downKey = game.input.keyboard.addKey(downKey);
-        this.upKey = game.input.keyboard.addKey(upKey);
-        this.fireKey = game.input.keyboard.addKey(fireKey);
-    }
 
     this.move = function () {
         if (!this.dead) {
 
-            if (this.duck.justPressed()) {
-                this.busy = true;
+            var xv = 0;
+            var yv = 0;
 
-                if (this.prevDir == 'left') {
-                    this.playAnimation('duck', this.notBusy);
+            //Check for attack keys
+            if (this.attack.justPressed()) {
+                this.player_busy = true;
+                game.world.bringToTop(this.sword);
+                if (this.player.data['direction'].includes("left")) {
+                    this.player.animations.play('attack_left');
                 } else {
-                    this.playAnimation('duck', this.notBusy);
+                    this.player.animations.play('attack_right');
                 }
-
+                this.player.animations.currentAnim.onComplete.add(function () {
+                    this.player_busy = false;
+                }, this);
             }
 
-            if (this.spaceBar.justPressed()) {
-                this.busy = true;
-
-                if (this.prevDir == 'left') {
-                    this.jump('jump_left')
-                } else {
-                    this.jump('jump_right');
-                }
-
-            }
-            if (!this.busy && this.upKey.isDown) {
-                if (this.prevDir == 'left') {
-                    this.sprite.animations.play('walk_left');
-                } else {
-                    this.sprite.animations.play('walk_right');
-                }
-                this.sprite.body.velocity.y = -200;
+            if (this.leftKey.isDown) {
+                xv = -200;
             }
 
-            if (!this.busy && this.downKey.isDown) {
-                if (this.prevDir == 'left') {
-                    this.sprite.animations.play('walk_left');
-                } else {
-                    this.sprite.animations.play('walk_right');
-                }
-                this.sprite.body.velocity.y = 200;
+            if (this.rightKey.isDown) {
+                xv = 200
             }
 
-            if (!this.busy && !this.upKey.isDown && !this.downKey.isDown) {
-                if (this.prevDir == 'left') {
-                    this.sprite.animations.play('idle_left');
-
-                } else {
-                    this.sprite.animations.play('idle_right');
-
-                }
-                this.sprite.body.velocity.x = 0;
-                this.sprite.body.velocity.y = 0;
+            if (this.upKey.isDown) {
+                yv = -200;
             }
+
+            if (this.downKey.isDown) {
+                yv = 200;
+            }
+
+            this.sprite.body.velocity.x = xv;
+            this.sprite.body.velocity.y = yv;
+
+            if (xv == 0 && yv == 0) {
+                if (this.player.data['direction'].includes("left")) {
+                    this.player.data['direction'] = 'idle_left';
+                } else {
+                    this.player.data['direction'] = 'idle_right';
+                }
+            }
+
+            if (xv < 0) {
+                this.player.data['direction'] = 'walk_left';
+            } else if (xv > 0) {
+                this.player.data['direction'] = 'walk_right';
+            }
+
+            if (yv != 0) {
+                if (this.player.data['direction'].includes("left")) {
+                    this.player.data['direction'] = 'walk_left';
+                } else {
+                    this.player.data['direction'] = 'walk_right';
+                }
+            }
+
+            this.player.animations.play(this.player.data['direction']);
 
             this.myHealthBar.setPosition(this.sprite.x + this.barxoffset, this.sprite.y - this.baryoffset);
             this.emitter.emitX = this.sprite.x;
@@ -229,16 +218,18 @@ function Player(game_copy) {
         //}
     };
 
-    this.jump = function(direction){
+
+
+    this.jump = function (direction) {
         this.busy = true;
-        this.sprite.y -=20;
-        this.playAnimation(direction,this.notBusy);
-        game.time.events.add(Phaser.Timer.SECOND * .2, function(){
+        this.sprite.y -= 20;
+        this.playAnimation(direction, this.notBusy);
+        game.time.events.add(Phaser.Timer.SECOND * .2, function () {
             this.sprite.y += 20;
         }, this);
     }
 
-    this.playAnimation = function (animation,callback){
+    this.playAnimation = function (animation, callback) {
         this.sprite.animations.play(animation);
 
         this.sprite.animations.currentAnim.onComplete.add(function () {
@@ -247,8 +238,7 @@ function Player(game_copy) {
 
     };
 
-
-    this.notBusy = function(){
+    this.notBusy = function () {
         console.log("notBusy");
         this.busy = false;
     };
@@ -269,14 +259,14 @@ function Player(game_copy) {
             this.deathFire.y = this.sprite.y - 10;
             this.dead = true;
         }
-        if(this.sprite.health == 10){
+        if (this.sprite.health == 10) {
             frequency = 100000;
             duration = 0;
-        }else{
-            frequency = this.sprite.health*15;
+        } else {
+            frequency = this.sprite.health * 15;
             duration = (10 - this.sprite.health) * 100;
         }
-        console.log(frequency,duration);
+        console.log(frequency, duration);
         //this.addSmoke(this.emitter,frequency,duration)
         this.emitter.flow(200, 100, 1, -1, true);
     };
@@ -294,7 +284,7 @@ function Player(game_copy) {
 
     };
 
-    this.addSmoke = function (emitter,frequency,duration) {
+    this.addSmoke = function (emitter, frequency, duration) {
         // console.log(typeof(emitter))
         // if(typeof (emitter) === 'object'){
         //     console.log("destroying emitter")

@@ -108,12 +108,12 @@ var level_02 = {
 		game.physics.arcade.enable(this.sword);
 		this.sword.animations.add('idle_left', [1], 10, true);
 		this.sword.animations.add('idle_right', [5], 10, true);
-		this.sword.animations.add('attack_left', [0,1,2,3], 40, false);
-		this.sword.animations.add('attack_right', [4,5,6,7], 40, false);
+		this.sword.animations.add('attack_left', [0, 1, 2, 3], 40, false);
+		this.sword.animations.add('attack_right', [4, 5, 6, 7], 40, false);
 		this.sword.scale.setTo(.4);
 		this.sword.anchor.setTo(.5, .5);
 		this.sword.alpha = 0;
-		
+
 		console.log(this.player);
 
 
@@ -160,20 +160,16 @@ var level_02 = {
 		var yv = 0;
 
 		//Check for attack keys
-		if (this.attack.isDown) {
+		if (this.attack.justPressed()) {
 			this.player_busy = true;
-			this.sword.alpha = 1;
-			if (this.player.data['direction'].includes("left")) {
+			game.world.bringToTop(this.sword);
+			if(this.player.data['direction'].includes("left")) {
 				this.player.animations.play('attack_left');
-				this.sword.animations.play('attack_left');
 			} else {
 				this.player.animations.play('attack_right');
-				this.sword.animations.play('attack_right');
 			}
-			this.player.animations.currentAnim.onComplete.add(function () {	
+			this.player.animations.currentAnim.onComplete.add(function () {
 				this.player_busy = false;
-				this.sword.alpha = 0;
-
 			}, this);
 		}
 
@@ -201,35 +197,29 @@ var level_02 = {
 			if (xv == 0 && yv == 0) {
 				if (this.player.data['direction'].includes("left")) {
 					this.player.data['direction'] = 'idle_left';
-					this.player.data['sword'] = 'idle_left';
 				} else {
 					this.player.data['direction'] = 'idle_right';
-					this.player.data['sword'] = 'idle_right';
 				}
 			}
 
 			if (xv < 0) {
 				this.player.data['direction'] = 'walk_left';
-				this.player.data['sword'] = 'idle_left';
 			} else if (xv > 0) {
 				this.player.data['direction'] = 'walk_right';
-				this.player.data['sword'] = 'idle_right';
 			}
 
 			if (yv != 0) {
 				if (this.player.data['direction'].includes("left")) {
 					this.player.data['direction'] = 'walk_left';
-					this.player.data['sword'] = 'idle_left';
 				} else {
 					this.player.data['direction'] = 'walk_right';
-					this.player.data['sword'] = 'idle_right';
 				}
 			}
 
 			this.player.animations.play(this.player.data['direction']);
 
 			// If the player is moving in any direction
-			if (xv !=0 || yv != 0) {
+			if (xv != 0 || yv != 0) {
 				// If player steps on a tile with index 14, show a portal
 				if (this.checkTileSteppedOn(this.layers.object_layer, this.player, 14)) {
 					this.portal = this.showPortal(544, 544);
@@ -245,14 +235,13 @@ var level_02 = {
 				}
 			}
 
-			this.moveSword(this.player);
-
 
 		} // end not busy block
 
 
+
 		// Move ghosts if they exist
-		if (typeof this.ghosts === 'object') {
+		if (typeof (this.ghosts) === 'object') {
 			this.moveGhosts(this.ghosts, 100);
 		}
 
@@ -264,11 +253,11 @@ var level_02 = {
 	// HELPER FUNCTIONS ///////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////
 
-	moveSword: function(player){
+	moveSword: function (player) {
 		this.sword.x = player.x;
 		this.sword.y = player.y;
 		this.sword.anchor.setTo(0.5);
-		if(player.data['direction'].includes("left")){
+		if (player.data['direction'].includes("left")) {
 			this.sword.scale.x *= -1;
 		}
 	},
