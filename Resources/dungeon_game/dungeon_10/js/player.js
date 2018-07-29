@@ -41,7 +41,7 @@ function Player(game_copy) {
         this.die = this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('Dead', 1, 10), 20, false);
         this.sprite.data['direction'] = 'idle_left';
         this.sprite.anchor.setTo(0.5);
-        game.physics.arcade.enable(this.sprite);
+        
 
         // tell camera to follow sprite now that we're on a map
         // and can move out of bounds

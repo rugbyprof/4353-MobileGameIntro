@@ -19,10 +19,10 @@ var boot = {
 			
 		} else // if on computer
 		{
-			this.scale.minWidth = 750
-			this.scale.minHeight = 422
-			this.scale.maxWidth = 750
-			this.scale.maxHeight = 422
+			this.scale.minWidth = 1024
+			this.scale.minHeight = 768
+			this.scale.maxWidth = 1024
+			this.scale.maxHeight = 768
 		}
 
 		this.scale.pageAlignHorizontally = true

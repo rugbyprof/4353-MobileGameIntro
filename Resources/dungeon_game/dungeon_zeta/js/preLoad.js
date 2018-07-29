@@ -16,7 +16,7 @@ var preLoad = {
 		// load images here: 
 		//////////////////////////////////////////////////////
 		game.load.image('pause', 'assets/images/pause.png');			
-		game.load.image('splash', 'assets/images/splash_screen_800.jpg');
+		game.load.image('splash', 'assets/images/splash_screen.png');
 		game.load.image('gameOver', 'assets/images/game_over_800.png');
 
 		// load atlas or sprites here: 

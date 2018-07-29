@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.Canvas, "game");
+var game = new Phaser.Game(1024, 768, Phaser.Canvas, "game");
 
 
 game.global = {
