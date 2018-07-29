@@ -249,25 +249,31 @@ Player.prototype.renderHealthBar = function () {
 
     var hurt_ratio = 1 - (this.player.health / this.player.data['max_health']);
 
-    if(hurt_ratio>1){
-        return;
-        // or do something else.
-    }
-
     if(typeof(this.healthbar) === 'object'){
         this.healthbar.destroy()
     }
     this.healthbar = game.add.graphics(this.player.x, this.player.y);
-    
-    this.healthbar.lineStyle(2, 0x000000, 1);
-    this.healthbar.beginFill(0x00FF00, 1);
-    this.healthbar.drawRect(0+xoff, 0+yoff, width, height);
-    this.healthbar.endFill();
+
+    if(hurt_ratio < 1){
+        //Draw green bar
+        this.healthbar.lineStyle(2, 0x000000, 1);
+        this.healthbar.beginFill(0x00FF00, 1);
+        this.healthbar.drawRect(0+xoff, 0+yoff, width, height);
+        this.healthbar.endFill();
+
+        //Draw red bar
+        this.healthbar.beginFill(0xFF0000, 1);
+        this.healthbar.drawRect(0+xoff, 0+yoff, width * hurt_ratio, height);
+        this.healthbar.endFill();
+    }else{
+        //Draw full red bar (this is only so bar will update position with player)
+        this.healthbar.lineStyle(2, 0x000000, 1);
+        this.healthbar.beginFill(0xFF0000, 1);
+        this.healthbar.drawRect(0+xoff, 0+yoff, width, height);
+        this.healthbar.endFill();
+    }
 
 
-    this.healthbar.beginFill(0xFF0000, 1);
-    this.healthbar.drawRect(0+xoff, 0+yoff, width * hurt_ratio, height);
-    this.healthbar.endFill();
 }
 
 /**
