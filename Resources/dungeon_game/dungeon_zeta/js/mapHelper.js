@@ -4,13 +4,14 @@
  * @param {string} map_key - key for map
  * @param {string} asset_path - path to map json file
  */
-var MapHelper = function (game,map_key,asset_path) {
+var MapHelper = function (game,map_key,asset_path,collision_index) {
     this.game = game;
     this.map_key = map_key;
     this.asset_path = asset_path;
-    this.mapjson = this.game.global.levels['level_02'];
+    this.mapjson = this.game.global.levels[map_key];
     this.layers = {};
     this.collisionLayerName = ""
+    this.collision_index = collision_index;
 }
 
 /**
@@ -45,10 +46,16 @@ MapHelper.prototype.create = function(){
 /**
  * 
  * @param {string} key - name of collision layer
+ * @param {int} tileIndex - index of tile to collide with
  */
-MapHelper.prototype.addCollisionLayer = function(key){
+MapHelper.prototype.addCollisionLayer = function(key,tileIndex=-1){
     this.collisionLayerName = key;
-    this.map.setCollision(1, true, this.layers[key]);
+    console.log("index:",this.collision_index)
+    if(tileIndex >= 0){
+        this.collision_index = tileIndex;
+    }
+    console.log("index:",this.collision_index)
+    this.map.setCollision(this.collision_index, true, this.layers[key]);
     this.game.physics.arcade.enable(this.layers[key]);
     this.layers[key].alpha = 0;
     this.collisionLayer = this.layers[key];
@@ -69,3 +76,19 @@ MapHelper.prototype.visibleCollisionLayer = function(alpha){
 MapHelper.prototype.resizeWorld = function(key){
     this.layers[key].resizeWorld();
 }
+
+/**
+ * 
+ * @param {string}layer: cache key for layer
+ * @param {object}player: phaser sprite object
+ */
+MapHelper.prototype.getTileProperties = function(key,player){
+    console.log(this.layers[key]);
+    var x = this.layers[key].getTileX(player.x);
+    var y = this.layers[key].getTileY(player.y);
+    console.log(x,y)
+
+    return  this.map.getTile(x, y, this.layers[key]);
+
+}
+

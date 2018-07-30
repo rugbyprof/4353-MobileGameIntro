@@ -37,8 +37,10 @@ var preLoad = {
 		//////////////////////////////////////////////////////
 		game.load.bitmapFont('mainFont', 'assets/fonts/ganonwhite/font.png', 'assets/fonts/ganonwhite/font.xml');
 
-		this.getMap("assets/maps/tunnel.json","level_01",this.saveMap)
-		this.getMap("assets/maps/cave.json","level_02",this.saveMap)
+		//Pre load all the json map info for each level
+		this.getMap("assets/maps/level_01.json","level_01",this.saveMap)
+		this.getMap("assets/maps/level_02.json","level_02",this.saveMap)
+		this.getMap("assets/maps/level_03.json","level_03",this.saveMap)
 	},
     
     /**
@@ -47,6 +49,11 @@ var preLoad = {
 	create:function(){
 		game.state.start('mainMenu')
 	},
+
+	/**
+	 * @param{string} url : path to the json we want to read in
+	 * @param{function} callback : callback function to handle to retreived json
+	 */
 	getMap: function (url, level,callback) // How can I use this callback?
 	{
 		var request = new XMLHttpRequest();
@@ -58,6 +65,10 @@ var preLoad = {
 		request.open('GET', url);
 		request.send();
 	},
+	/**
+	 * @param{string}level: name of the game level used as a key in the global object
+	 * @param{json}data: the map json 
+	 */
 	saveMap: function(level,data){
 		this.game.global.levels[level] = JSON.parse(data);
 	}

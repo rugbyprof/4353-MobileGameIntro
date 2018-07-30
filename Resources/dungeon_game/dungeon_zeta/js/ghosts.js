@@ -5,7 +5,7 @@
  * @param {int} x - general x coord to spawn around
  * @param {int} y - general y coord to spawn around
  */
-var Ghosts = function (game, n, x , y) {
+var Ghosts = function (game, n, x, y) {
     this.game = game;
     this.num_ghosts = n;
     this.x_coord = x;
@@ -30,7 +30,7 @@ var Ghosts = function (game, n, x , y) {
         15: [30, 31] // orange right
     };
 
-    this.spawnGhosts(n,x,y);
+    this.spawnGhosts(n, x, y);
 }
 
 /**
@@ -42,7 +42,9 @@ var Ghosts = function (game, n, x , y) {
 Ghosts.prototype.moveGhosts = function (player) {
     this.player = player;
     for (i = 0; i < this.ghosts.length; i++) {
-        this.moveGhostTowardPlayer(this.ghosts[i]);
+        if (this.ghosts[i].inCamera) {
+            this.moveGhostTowardPlayer(this.ghosts[i]);
+        }
     }
 }
 
@@ -53,8 +55,6 @@ Ghosts.prototype.moveGhosts = function (player) {
  * @param: ghost - phaser sprite
  */
 Ghosts.prototype.moveGhostTowardPlayer = function (ghost) {
-    console.log(ghost);
-    console.log(this.player);
     // get differences in x and y locations between enemy and player
     var xdiff = Math.abs(this.player.x - ghost.x);
     var ydiff = Math.abs(this.player.y - ghost.y);
@@ -168,7 +168,7 @@ Ghosts.prototype.spawnGhosts = function (n, x, y) {
  * @param: y - int y coord
  * @returns: ghost sprite
  */
-Ghosts.prototype.spawnGhost = function (x, y){
+Ghosts.prototype.spawnGhost = function (x, y) {
 
 
     // randomish location
@@ -194,5 +194,5 @@ Ghosts.prototype.spawnGhost = function (x, y){
  * Returns a random number between min (inclusive) and max (exclusive)
  */
 function getRandomInt(min, max) {
-	return Math.random() * (max - min) + min;
+    return Math.random() * (max - min) + min;
 }

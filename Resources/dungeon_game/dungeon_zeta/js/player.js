@@ -101,11 +101,11 @@ Player.prototype.registerKeys = function () {
     this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    this.attack = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFTKEY);
+    this.attack = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 }
 
 /**
- * 
+ * Initializes a player 
  * @param {int} x : x coord
  * @param {int} y : y coord
  * @param {string} atlas : name of atlas for sprite
@@ -129,6 +129,14 @@ Player.prototype.createPlayer = function (x, y, atlas) {
     this.player.health = 100;
     this.player.anchor.setTo(0.5);
     this.player.body.collideWorldBounds = true;
+
+    // shrink body for better collision detection
+    this.player.body.width = this.player.body.width * .8
+    this.player.body.height = this.player.body.height * .8
+
+    this.player.animations.play('attack_left')
+
+
 }
 
 /**
@@ -137,14 +145,21 @@ Player.prototype.createPlayer = function (x, y, atlas) {
  * @param {object} sprite 
  */
 Player.prototype.registerAnimation = function (anim, sprite) {
-    key         = anim.key;         // key for phaser cache
-    atlas_key   = anim.atlas_key;   // atlas key in json file
-    start       = anim.start_frame; // start frame number
-    end         = anim.end_frame;   // end frame number
-    frame_rate  = anim.rate;        // frame rate
-    loop        = anim.loop;        // repeate animation or play once
+    key = anim.key; // key for phaser cache
+    atlas_key = anim.atlas_key; // atlas key in json file
+    start = anim.start_frame; // start frame number
+    end = anim.end_frame; // end frame number
+    frame_rate = anim.rate; // frame rate
+    loop = anim.loop; // repeate animation or play once
     this.playerAnimations[anim.key] = sprite.animations.add(key, Phaser.Animation.generateFrameNames(atlas_key, start, end), frame_rate, loop);
+    if(anim.key.includes("attack")){
+        console.log("adding callback")
+        this.playerAnimations[anim.key].onComplete.add(this.setNotBusy, this);
+        console.log(this.playerAnimations[anim.key])
+    }
 }
+
+
 
 /**
  * Moves player sprite around. Should be called in main update loop.
@@ -158,17 +173,13 @@ Player.prototype.move = function () {
         //Check for attack keys
         if (this.attack.justPressed()) {
             this.playerBusy = true;
-           this. game.world.bringToTop(this.sword);
             if (this.player.data['direction'].includes("left")) {
                 this.player.animations.play('attack_left');
             } else {
                 this.player.animations.play('attack_right');
             }
-            this.player.animations.currentAnim.onComplete.add(function () {
-                this.playerBusy = false;
-            }, this);
         }
-
+        
         if (this.leftKey.isDown) {
             xv = -200;
         }
@@ -210,7 +221,9 @@ Player.prototype.move = function () {
             }
         }
 
-        this.player.animations.play(this.player.data['direction']);
+        if(!this.playerBusy){
+            this.player.animations.play(this.player.data['direction']);
+        }
 
         // this.emitter.emitX = this.player.x;
         // this.emitter.emitY = this.player.y;
@@ -219,9 +232,9 @@ Player.prototype.move = function () {
         this.player.body.velocity.y = 0;
     }
     this.frames++
-    if(this.frames % 100 == 0){
-        this.player.health-=1;
-    }
+        if (this.frames % 100 == 0) {
+            this.player.health -= 1;
+        }
     this.renderHealthBar();
     this.checkForDeath();
 }
@@ -229,31 +242,39 @@ Player.prototype.move = function () {
 /**
  * Brings player to front of game. Makes sure it is visible.
  */
-Player.prototype.bringToFront = function(){
+Player.prototype.bringToFront = function () {
     this.game.world.bringToTop(this.player);
 
 }
 
-Player.prototype.checkForDeath = function(){
-    if(!this.playerDead && this.player.health <= 0){
+/**
+ * 
+ */
+Player.prototype.checkForDeath = function () {
+    if (!this.playerDead && this.player.health <= 0) {
         this.playerDead = true;
         this.player.animations.play('die');
     }
 }
 
-
-Player.prototype.createHealthBar = function(){
+/**
+ * 
+ */
+Player.prototype.createHealthBar = function () {
     return {
-        x:this.player.x, 
-        y:this.player.y,
+        x: this.player.x,
+        y: this.player.y,
         xoffset: -20,
-        yoffset: 30, 
-        width: 50, 
+        yoffset: 30,
+        width: 50,
         height: 5,
         percent: 100
     };
 }
 
+/**
+ * Draw healthbar as configured
+ */
 Player.prototype.renderHealthBar = function () {
     var width = this.healthBarConfig.width;
     var height = this.healthBarConfig.height;
@@ -262,56 +283,49 @@ Player.prototype.renderHealthBar = function () {
 
     var hurt_ratio = 1 - (this.player.health / this.player.data['max_health']);
 
-    if(typeof(this.healthbar) === 'object'){
+    if (typeof (this.healthbar) === 'object') {
         this.healthbar.destroy()
     }
     this.healthbar = game.add.graphics(this.player.x, this.player.y);
 
-    if(hurt_ratio < 1){
+    if (hurt_ratio < 1) {
         //Draw green bar
         this.healthbar.lineStyle(2, 0x000000, 1);
         this.healthbar.beginFill(0x00FF00, 1);
-        this.healthbar.drawRect(0+xoff, 0+yoff, width, height);
+        this.healthbar.drawRect(0 + xoff, 0 + yoff, width, height);
         this.healthbar.endFill();
 
         //Draw red bar
         this.healthbar.beginFill(0xFF0000, 1);
-        this.healthbar.drawRect(0+xoff, 0+yoff, width * hurt_ratio, height);
+        this.healthbar.drawRect(0 + xoff, 0 + yoff, width * hurt_ratio, height);
         this.healthbar.endFill();
-    }else{
+    } else {
         //Draw full red bar (this is only so bar will update position with player)
         this.healthbar.lineStyle(2, 0x000000, 1);
         this.healthbar.beginFill(0xFF0000, 1);
-        this.healthbar.drawRect(0+xoff, 0+yoff, width, height);
+        this.healthbar.drawRect(0 + xoff, 0 + yoff, width, height);
         this.healthbar.endFill();
     }
 
 
 }
 
+
 /**
  * 
- * @param {object} map layer reference
+ * @param {int} x | x coord
+ * @param {int} y | y coord
  */
-Player.prototype.getTileProperties = function(layer){
-    
-		var x = this.layers.ground_layer.getTileX(this.player.x);
-		var y = this.layers.ground_layer.getTileY(this.player.y);
-
-		return  this.map.getTile(x, y, layer);
-
-}
-
-Player.prototype.transportPlayer = function(x,y){
+Player.prototype.transportPlayer = function (x, y) {
     this.player.x = x;
     this.player.y = y;
 }
 
 /**
  * 
- * @param {object} game sprite 
+ * @param {object} sprite | phaser sprite object 
  */
-Player.prototype.intersectsWith = function(sprite) {
+Player.prototype.intersectsWith = function (sprite) {
 
     var boundsA = this.player.getBounds();
     var boundsB = sprite.getBounds();
@@ -320,6 +334,11 @@ Player.prototype.intersectsWith = function(sprite) {
 
 };
 
-Player.prototype.alias = function(){
+Player.prototype.alias = function () {
     return this.player;
+}
+
+Player.prototype.setNotBusy = function(){
+    console.log("set not busy")
+    this.playerBusy = false;
 }
