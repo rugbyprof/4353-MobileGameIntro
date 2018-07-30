@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
  <tileset firstgid="1" name="collision" tilewidth="32" tileheight="32" tilecount="1" columns="1">
-  <image source="../../../../stendhal/tiled/tileset/logic/collision.png" width="32" height="32"/>
+  <image source="../tileset/logic/collision.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="2" name="ground/brown" tilewidth="32" tileheight="32" tilecount="5" columns="5">
-  <image source="../../../../stendhal/tiled/tileset/ground/brown.png" trans="ff00ff" width="160" height="32"/>
+  <image source="../tileset/ground/brown.png" trans="ff00ff" width="160" height="32"/>
  </tileset>
  <tileset firstgid="7" name="rock/rocks_2" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/ground/rock/rocks_2.png" trans="ff00ff" width="64" height="64"/>
+  <image source="../tileset/ground/rock/rocks_2.png" trans="ff00ff" width="64" height="64"/>
  </tileset>
  <tileset firstgid="11" name="floor_tiles" tilewidth="32" tileheight="32" tilecount="9" columns="3">
-  <image source="../../../../stendhal/tiled/tileset/ground/indoor/floor_tiles.png" width="96" height="96"/>
+  <image source="../tileset/ground/indoor/floor_tiles.png" width="96" height="96"/>
  </tileset>
  <tileset firstgid="20" name="rocks" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/ground/rock/rocks.png" width="64" height="64"/>
+  <image source="../tileset/ground/rock/rocks.png" width="64" height="64"/>
  </tileset>
  <tileset firstgid="24" name="wall/int_rock" tilewidth="32" tileheight="32" tilecount="140" columns="10">
-  <image source="../../../../stendhal/tiled/tileset/building/wall/int_rock.png" width="320" height="448"/>
+  <image source="../tileset/building/wall/int_rock.png" width="320" height="448"/>
  </tileset>
  <tileset firstgid="164" name="purple_crystal" tilewidth="32" tileheight="32" tilecount="20" columns="5">
-  <image source="../../../../stendhal/tiled/tileset/ground/rock/purple_crystal.png" width="160" height="128"/>
+  <image source="../tileset/ground/rock/purple_crystal.png" width="160" height="128"/>
  </tileset>
  <tileset firstgid="184" name="stairs" tilewidth="32" tileheight="32" tilecount="12" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/building/stairs/stairs.png" trans="ff00ff" width="64" height="192"/>
+  <image source="../tileset/building/stairs/stairs.png" trans="ff00ff" width="64" height="192"/>
  </tileset>
  <tileset firstgid="196" name="dark_stairs" tilewidth="32" tileheight="32" tilecount="2" columns="1">
-  <image source="../../../../stendhal/tiled/tileset/building/stairs/dark_stairs.png" trans="ff00ff" width="32" height="64"/>
+  <image source="../tileset/building/stairs/dark_stairs.png" trans="ff00ff" width="32" height="64"/>
  </tileset>
  <tileset firstgid="198" name="blood/floor_stain" tilewidth="32" tileheight="32" tilecount="1" columns="1">
-  <image source="../../../../stendhal/tiled/tileset/item/blood/floor_stain.png" width="32" height="32"/>
+  <image source="../tileset/item/blood/floor_stain.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="199" name="blood/nsew_stains" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/item/blood/nsew_stains.png" width="64" height="64"/>
+  <image source="../tileset/item/blood/nsew_stains.png" width="64" height="64"/>
  </tileset>
  <tileset firstgid="203" name="corpse/skeleton" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/item/corpse/skeleton.png" trans="ff00ff" width="64" height="64"/>
+  <image source="../tileset/item/corpse/skeleton.png" trans="ff00ff" width="64" height="64"/>
  </tileset>
  <tileset firstgid="207" name="corpse/huge_animal" tilewidth="32" tileheight="32" tilecount="16" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/item/corpse/huge_animal.png" width="64" height="256"/>
+  <image source="../tileset/item/corpse/huge_animal.png" width="64" height="256"/>
  </tileset>
  <tileset firstgid="223" name="skull_dark" tilewidth="32" tileheight="32" tilecount="2" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/item/corpse/skull_dark.png" width="64" height="32"/>
+  <image source="../tileset/item/corpse/skull_dark.png" width="64" height="32"/>
  </tileset>
  <tileset firstgid="225" name="skull_pale" tilewidth="32" tileheight="32" tilecount="2" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/item/corpse/skull_pale.png" width="64" height="32"/>
+  <image source="../tileset/item/corpse/skull_pale.png" width="64" height="32"/>
  </tileset>
  <tileset firstgid="227" name="broken_green_column" tilewidth="32" tileheight="32" tilecount="2" columns="1">
-  <image source="../../../../stendhal/tiled/tileset/item/statue/broken_green_column.png" width="32" height="64"/>
+  <image source="../tileset/item/statue/broken_green_column.png" width="32" height="64"/>
  </tileset>
  <tileset firstgid="229" name="blackened_column" tilewidth="32" tileheight="32" tilecount="4" columns="1">
-  <image source="../../../../stendhal/tiled/tileset/item/statue/blackened_column.png" width="32" height="128"/>
+  <image source="../tileset/item/statue/blackened_column.png" width="32" height="128"/>
  </tileset>
  <tileset firstgid="233" name="mushroom3" tilewidth="32" tileheight="32" tilecount="2" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/plant/mushroom3.png" width="64" height="32"/>
+  <image source="../tileset/plant/mushroom3.png" width="64" height="32"/>
  </tileset>
  <tileset firstgid="235" name="star_shaped_plants" tilewidth="32" tileheight="32" tilecount="6" columns="2">
-  <image source="../../../../stendhal/tiled/tileset/plant/star_shaped_plants.png" width="64" height="96"/>
+  <image source="../tileset/plant/star_shaped_plants.png" width="64" height="96"/>
  </tileset>
  <tileset firstgid="241" name="portal" tilewidth="32" tileheight="32" tilecount="16" columns="8">
-  <image source="../../../../stendhal/tiled/tileset/logic/portal.png" width="256" height="64"/>
+  <image source="../tileset/logic/portal.png" width="256" height="64"/>
  </tileset>
  <tileset firstgid="257" name="creature/giant_human" tilewidth="32" tileheight="32" tilecount="13" columns="13">
-  <image source="../../../../stendhal/tiled/tileset/logic/creature/giant_human.png" width="416" height="32"/>
+  <image source="../tileset/logic/creature/giant_human.png" width="416" height="32"/>
  </tileset>
  <tileset firstgid="270" name="creature/mutant" tilewidth="32" tileheight="32" tilecount="6" columns="6">
-  <image source="../../../../stendhal/tiled/tileset/logic/creature/mutant.png" width="192" height="32"/>
+  <image source="../tileset/logic/creature/mutant.png" width="192" height="32"/>
  </tileset>
  <tileset firstgid="276" name="creature/huge_animal" tilewidth="32" tileheight="32" tilecount="14" columns="14">
-  <image source="../../../../stendhal/tiled/tileset/logic/creature/huge_animal.png" width="451" height="32"/>
+  <image source="../tileset/logic/creature/huge_animal.png" width="451" height="32"/>
  </tileset>
  <tileset firstgid="290" name="ground/brown" tilewidth="32" tileheight="32" tilecount="5" columns="5">
-  <image source="../../../../stendhal/tiled/tileset/ground/brown.png" trans="ff00ff" width="160" height="32"/>
+  <image source="../tileset/ground/brown.png" trans="ff00ff" width="160" height="32"/>
  </tileset>
  <layer name="0_floor" width="128" height="128" visible="0">
   <data encoding="base64">

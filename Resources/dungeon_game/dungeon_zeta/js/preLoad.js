@@ -26,6 +26,7 @@ var preLoad = {
 		game.load.atlas('knight_atlas', 'assets/sprites/knight_atlas.png', 'assets/sprites/knight_atlas.json');
 		game.load.atlas('red_portal', 'assets/sprites/red_portal.png', 'assets/sprites/red_portal.json');
 		game.load.spritesheet('portal_smoke', 'assets/sprites/smoke.png', 128, 128);
+		game.load.spritesheet('ghosts', 'assets/sprites/pacman_ghosts.png', 116, 116);
 
 		// load audio here: 
 		//game.load.audio('audiokey1', 'path/to/sounds/one.mp3')
@@ -36,6 +37,8 @@ var preLoad = {
 		//////////////////////////////////////////////////////
 		game.load.bitmapFont('mainFont', 'assets/fonts/ganonwhite/font.png', 'assets/fonts/ganonwhite/font.xml');
 
+		this.getMap("assets/maps/tunnel.json","level_01",this.saveMap)
+		this.getMap("assets/maps/cave.json","level_02",this.saveMap)
 	},
     
     /**
@@ -43,5 +46,19 @@ var preLoad = {
      */
 	create:function(){
 		game.state.start('mainMenu')
+	},
+	getMap: function (url, level,callback) // How can I use this callback?
+	{
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function () {
+			if (request.readyState == 4 && request.status == 200) {
+				callback(level,request.responseText); // Another callback here
+			}
+		};
+		request.open('GET', url);
+		request.send();
+	},
+	saveMap: function(level,data){
+		this.game.global.levels[level] = JSON.parse(data);
 	}
 }

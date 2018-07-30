@@ -1,26 +1,18 @@
 var level_01 = {
 
+
 	preload: function () {
 		console.log("level_01");
 		// Load tile map
 		game.load.tilemap('level_01', 'assets/maps/tunnel.json', null, Phaser.Tilemap.TILED_JSON);
 
-		//map tile images:
-		game.load.image('ground', 'assets/tileset/ground/brown.png');
-		game.load.image('iron_lamp', 'assets/tileset/furniture/light/iron_lamp.png');
-		game.load.image('flames', 'assets/tileset/furniture/light/flames.png');
-		game.load.image('amazon', 'assets/tileset/logic/creature/amazon.png');
-		game.load.image('skull_dark', 'assets/tileset/item/corpse/skull_dark.png');
-		game.load.image('huge_animal', 'assets/tileset/item/corpse/huge_animal.png');
-		game.load.image('rocks_2', 'assets/tileset/ground/rock/rocks_2.png');
-		game.load.image('pink_crystal', 'assets/tileset/ground/rock/pink_crystal.png');
-		game.load.image('green_crystal', 'assets/tileset/ground/rock/green_crystal.png');
-		game.load.image('huge_animal2', 'assets/tileset/logic/creature/huge_animal.png');
-		game.load.image('animal', 'assets/tileset/logic/creature/animal.png');
-		game.load.image('undead', 'assets/tileset/logic/creature/undead.png');
-		game.load.image('elemental', 'assets/tileset/logic/creature/elemental.png');
-		game.load.image('int_rock', 'assets/tileset/building/wall/int_rock.png');
-		game.load.image('collision', 'assets/tileset/logic/collision.png');
+		this.mapjson = this.game.global.levels['level_01'];
+
+
+		for (i = 0; i < this.mapjson.tilesets.length; i++) {
+			game.load.image(this.mapjson.tilesets[i].name, this.mapjson.tilesets[i].image.replace("..", "assets"));
+		}
+
 	},
 	create: function () {
 
@@ -29,21 +21,10 @@ var level_01 = {
 		// Mapping layers and tilesets
 		/////////////////////////////////////////////////
 		this.map = game.add.tilemap('level_01');
-		this.map.addTilesetImage('ground', 'ground');
-		this.map.addTilesetImage('logic/collision', 'collision');
-		this.map.addTilesetImage('steel lamp', 'iron_lamp');
-		this.map.addTilesetImage('flames', 'flames');
-		this.map.addTilesetImage('amazoness', 'amazon');
-		this.map.addTilesetImage('corpse', 'skull_dark');
-		this.map.addTilesetImage('corpse 2', 'huge_animal');
-		this.map.addTilesetImage('rocks', 'rocks_2');
-		this.map.addTilesetImage('crystal', 'pink_crystal');
-		this.map.addTilesetImage('crystal 2', 'green_crystal');
-		this.map.addTilesetImage('huge animals', 'huge_animal2');
-		this.map.addTilesetImage('animals', 'animal');
-		this.map.addTilesetImage('undead', 'undead');
-		this.map.addTilesetImage('elements', 'elemental');
-		this.map.addTilesetImage('wall/int_rock', 'int_rock');
+
+		for (i = 0; i < this.mapjson.tilesets.length; i++) {
+			this.map.addTilesetImage(this.mapjson.tilesets[i].name, this.mapjson.tilesets[i].name);
+		}
 
 		this.layers = {
 			ground_layer: this.map.createLayer('0_floor'),

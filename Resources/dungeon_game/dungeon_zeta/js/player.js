@@ -1,137 +1,325 @@
-function Player(game_copy){
-    var game = game_copy;
+var player_animations = [{
+        'key': 'walk_left',
+        'atlas_key': 'Walk_left',
+        'start_frame': 0,
+        'end_frame': 8,
+        'rate': 20,
+        'loop': true
+    },
+    {
+        'key': 'walk_right',
+        'atlas_key': 'Walk_right',
+        'start_frame': 0,
+        'end_frame': 8,
+        'rate': 20,
+        'loop': true
+    },
+    {
+        'key': 'idle_left',
+        'atlas_key': 'Idle_left',
+        'start_frame': 0,
+        'end_frame': 9,
+        'rate': 20,
+        'loop': true
+    },
+    {
+        'key': 'idle_right',
+        'atlas_key': 'Idle_right',
+        'start_frame': 0,
+        'end_frame': 9,
+        'rate': 20,
+        'loop': true
+    },
+    {
+        'key': 'jump_right',
+        'atlas_key': 'Jump_right',
+        'start_frame': 0,
+        'end_frame': 9,
+        'rate': 20,
+        'loop': false
+    },
+    {
+        'key': 'jump_left',
+        'atlas_key': 'Jump_left',
+        'start_frame': 0,
+        'end_frame': 9,
+        'rate': 20,
+        'loop': false
+    },
+    {
+        'key': 'attack_right',
+        'atlas_key': 'Attack_right',
+        'start_frame': 0,
+        'end_frame': 9,
+        'rate': 20,
+        'loop': false
+    },
+    {
+        'key': 'attack_left',
+        'atlas_key': 'Attack_left',
+        'start_frame': 0,
+        'end_frame': 9,
+        'rate': 20,
+        'loop': false
+    },
+    {
+        'key': 'die',
+        'atlas_key': 'Dead',
+        'start_frame': 1,
+        'end_frame': 10,
+        'rate': 20,
+        'loop': false
+    }
+];
 
-    this.load = function(key,value){
-        this[key] = value;
-    };
+/**
+ * 
+ * @param {object} game : phaser game object
+ * @param {int} x : x coord of player
+ * @param {int} y : y coord of player
+ * @param {string} atlas : string key name for atlas to build character sprite
+ */
+var Player = function (game, x, y, atlas) {
+    this.game = game;
+    this.registerKeys();
 
-    this.preload = function(){
-		game.load.atlas('knight_atlas', 'assets/sprites/knight_atlas.png', 'assets/sprites/knight_atlas.json');
-    };
+    this.game.load.atlas('knight_atlas', 'assets/sprites/knight_atlas.png', 'assets/sprites/knight_atlas.json');
+    this.game.load.spritesheet('smoke', 'assets/images/smoke_particle.png', 13, 12);
 
-    this.create =  function(x,y){
-        this.x = x;
-        this.y = y;
-		// Adding the knight atlas that contains all the animations
-        this.sprite = game.add.sprite(this.x, this.y, 'knight_atlas');
-        
-		// Add walking and idle animations. Different aninmations are needed based on direction of movement.
-		this.sprite.animations.add('walk_left', Phaser.Animation.generateFrameNames('Walk_left', 0, 8), 20, true);
-		this.sprite.animations.add('walk_right', Phaser.Animation.generateFrameNames('Walk_right', 0, 8), 20, true);
-		this.sprite.animations.add('idle_left', Phaser.Animation.generateFrameNames('Idle_left', 0, 9), 20, true);
-		this.sprite.animations.add('idle_right', Phaser.Animation.generateFrameNames('Idle_right', 0, 9), 20, true);
-        this.sprite.animations.play('idle_left');
-        
-        this.sprite.anchor.setTo(0.5);
-        
-        game.physics.arcade.enable(this.sprite);
+    this.createPlayer(x, y, atlas);
+    this.healthBarConfig = this.createHealthBar();
+    this.createHealthBar();
 
-		// tell camera to follow sprite now that we're on a map
-		// and can move out of bounds
-		game.camera.follow(this.sprite);
-        
-		this.downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-		this.upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-		this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-		this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-		this.spaceBar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    };
-
-    this.move = function(){
-		if (this.leftKey.isDown) {
-			this.sprite.body.velocity.x = -200;
-			this.sprite.animations.play('walk_left');
-			this.prevDir = 'left'
-		}
-		if (this.rightKey.isDown) {
-			this.sprite.body.velocity.x = 200;
-			this.sprite.animations.play('walk_right');
-			this.prevDir = 'right'
-		}
-		if (this.upKey.isDown) {
-			if (this.prevDir == 'left') {
-				this.sprite.animations.play('walk_left');
-			} else {
-				this.sprite.animations.play('walk_right');
-			}
-			this.sprite.body.velocity.y = -200;
-		}
-
-		if (this.downKey.isDown) {
-			if (this.prevDir == 'left') {
-				this.sprite.animations.play('walk_left');
-			} else {
-				this.sprite.animations.play('walk_right');
-			}
-			this.sprite.body.velocity.y = 200;
-		}
-
-		if (this.leftKey.isDown || this.rightKey.isDown || this.upKey.isDown || this.downKey.isDown) {
-			this.getTileProperties();
-		}
-
-		if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown) {
-			if (this.prevDir == 'left') {
-				this.sprite.animations.play('idle_left');
-			} else {
-				this.sprite.animations.play('idle_right');
-			}
-			this.sprite.body.velocity.x = 0;
-			this.sprite.body.velocity.y = 0;
-		}
-    };
-
-    this.getTileProperties = function () {
-		var x = this.layers.ground_layer.getTileX(this.sprite.x);
-		var y = this.layers.ground_layer.getTileY(this.sprite.y);
-
-		var tile = this.map.getTile(x, y, this.layers.ground_layer);
-
-    };
-    
-	this.scalePlayer = function(){
-
-		scale = game.add.tween(this.sprite.scale).to({
-			x: .2,
-			y: .2
-		}, 1000, Phaser.Easing.Linear.None, true);
-	};
-
-	this.fadePlayer = function(){
-		fade = game.add.tween(this.sprite).to({
-			alpha: 0
-		}, 750, "Linear", true);
-	};
-
-	this.tweenMovePlayer = function(x,y){
-		
-		var px = x;
-		var py = y;
-		movePlayer = game.add.tween(this.sprite).to({
-			x: px,
-			y: py
-		}, 500, Phaser.Easing.Linear.None,true);
-    };
-    
-    this.movePlayer = function(x1,y1){
-        game.knight.create(x1,y1);
-
-    };
-
-	this.transportPlayer = function (x1,y1,x2,y2) {
-        this.tweenMovePlayer(x1,y1);
-        this.fadePlayer();
-        this.scalePlayer();
-        setTimeout(this.movePlayer, 1000,x2,y2);
-
-    };
-    
-    this.isOverlapped = function(sprite) {
-
-		var boundsA = this.sprite.getBounds();
-		var boundsB = sprite.getBounds();
-	
-		return Phaser.Rectangle.intersects(boundsA, boundsB);
-	
-	};
+    this.frames = 0; // temp
 };
+
+/**
+ * Just registers which keys will be used for player sprite
+ */
+Player.prototype.registerKeys = function () {
+    this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+    this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    this.attack = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFTKEY);
+}
+
+/**
+ * 
+ * @param {int} x : x coord
+ * @param {int} y : y coord
+ * @param {string} atlas : name of atlas for sprite
+ */
+Player.prototype.createPlayer = function (x, y, atlas) {
+    this.playerDead = false;
+    this.playerAnimations = {};
+    this.playerBusy = false;
+
+    this.player = this.game.add.sprite(x, y, atlas);
+    this.alias = this.player;
+    this.game.physics.arcade.enable(this.player);
+
+    for (i = 0; i < player_animations.length; i++) {
+        this.registerAnimation(player_animations[i], this.player);
+    }
+
+    this.player.data['direction'] = 'idle_left';
+    this.player.data['max_health'] = 100;
+    this.player.data['coins'] = Math.floor(Math.random() * 100);
+    this.player.health = 100;
+    this.player.anchor.setTo(0.5);
+    this.player.body.collideWorldBounds = true;
+}
+
+/**
+ * This function adds animations to a game sprite
+ * @param {object} anim 
+ * @param {object} sprite 
+ */
+Player.prototype.registerAnimation = function (anim, sprite) {
+    key         = anim.key;         // key for phaser cache
+    atlas_key   = anim.atlas_key;   // atlas key in json file
+    start       = anim.start_frame; // start frame number
+    end         = anim.end_frame;   // end frame number
+    frame_rate  = anim.rate;        // frame rate
+    loop        = anim.loop;        // repeate animation or play once
+    this.playerAnimations[anim.key] = sprite.animations.add(key, Phaser.Animation.generateFrameNames(atlas_key, start, end), frame_rate, loop);
+}
+
+/**
+ * Moves player sprite around. Should be called in main update loop.
+ */
+Player.prototype.move = function () {
+    if (!this.playerDead) {
+
+        var xv = 0; //set x velocity to zero
+        var yv = 0; //set y velocity to zero
+
+        //Check for attack keys
+        if (this.attack.justPressed()) {
+            this.playerBusy = true;
+           this. game.world.bringToTop(this.sword);
+            if (this.player.data['direction'].includes("left")) {
+                this.player.animations.play('attack_left');
+            } else {
+                this.player.animations.play('attack_right');
+            }
+            this.player.animations.currentAnim.onComplete.add(function () {
+                this.playerBusy = false;
+            }, this);
+        }
+
+        if (this.leftKey.isDown) {
+            xv = -200;
+        }
+
+        if (this.rightKey.isDown) {
+            xv = 200
+        }
+
+        if (this.upKey.isDown) {
+            yv = -200;
+        }
+
+        if (this.downKey.isDown) {
+            yv = 200;
+        }
+
+        this.player.body.velocity.x = xv;
+        this.player.body.velocity.y = yv;
+
+        if (xv == 0 && yv == 0) {
+            if (this.player.data['direction'].includes("left")) {
+                this.player.data['direction'] = 'idle_left';
+            } else {
+                this.player.data['direction'] = 'idle_right';
+            }
+        }
+
+        if (xv < 0) {
+            this.player.data['direction'] = 'walk_left';
+        } else if (xv > 0) {
+            this.player.data['direction'] = 'walk_right';
+        }
+
+        if (yv != 0) {
+            if (this.player.data['direction'].includes("left")) {
+                this.player.data['direction'] = 'walk_left';
+            } else {
+                this.player.data['direction'] = 'walk_right';
+            }
+        }
+
+        this.player.animations.play(this.player.data['direction']);
+
+        // this.emitter.emitX = this.player.x;
+        // this.emitter.emitY = this.player.y;
+    } else {
+        this.player.body.velocity.x = 0;
+        this.player.body.velocity.y = 0;
+    }
+    this.frames++
+    if(this.frames % 100 == 0){
+        this.player.health-=1;
+    }
+    this.renderHealthBar();
+    this.checkForDeath();
+}
+
+/**
+ * Brings player to front of game. Makes sure it is visible.
+ */
+Player.prototype.bringToFront = function(){
+    this.game.world.bringToTop(this.player);
+
+}
+
+Player.prototype.checkForDeath = function(){
+    if(!this.playerDead && this.player.health <= 0){
+        this.playerDead = true;
+        this.player.animations.play('die');
+    }
+}
+
+
+Player.prototype.createHealthBar = function(){
+    return {
+        x:this.player.x, 
+        y:this.player.y,
+        xoffset: -20,
+        yoffset: 30, 
+        width: 50, 
+        height: 5,
+        percent: 100
+    };
+}
+
+Player.prototype.renderHealthBar = function () {
+    var width = this.healthBarConfig.width;
+    var height = this.healthBarConfig.height;
+    var xoff = this.healthBarConfig.xoffset;
+    var yoff = this.healthBarConfig.yoffset;
+
+    var hurt_ratio = 1 - (this.player.health / this.player.data['max_health']);
+
+    if(typeof(this.healthbar) === 'object'){
+        this.healthbar.destroy()
+    }
+    this.healthbar = game.add.graphics(this.player.x, this.player.y);
+
+    if(hurt_ratio < 1){
+        //Draw green bar
+        this.healthbar.lineStyle(2, 0x000000, 1);
+        this.healthbar.beginFill(0x00FF00, 1);
+        this.healthbar.drawRect(0+xoff, 0+yoff, width, height);
+        this.healthbar.endFill();
+
+        //Draw red bar
+        this.healthbar.beginFill(0xFF0000, 1);
+        this.healthbar.drawRect(0+xoff, 0+yoff, width * hurt_ratio, height);
+        this.healthbar.endFill();
+    }else{
+        //Draw full red bar (this is only so bar will update position with player)
+        this.healthbar.lineStyle(2, 0x000000, 1);
+        this.healthbar.beginFill(0xFF0000, 1);
+        this.healthbar.drawRect(0+xoff, 0+yoff, width, height);
+        this.healthbar.endFill();
+    }
+
+
+}
+
+/**
+ * 
+ * @param {object} map layer reference
+ */
+Player.prototype.getTileProperties = function(layer){
+    
+		var x = this.layers.ground_layer.getTileX(this.player.x);
+		var y = this.layers.ground_layer.getTileY(this.player.y);
+
+		return  this.map.getTile(x, y, layer);
+
+}
+
+Player.prototype.transportPlayer = function(x,y){
+    this.player.x = x;
+    this.player.y = y;
+}
+
+/**
+ * 
+ * @param {object} game sprite 
+ */
+Player.prototype.intersectsWith = function(sprite) {
+
+    var boundsA = this.player.getBounds();
+    var boundsB = sprite.getBounds();
+
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
+
+};
+
+Player.prototype.alias = function(){
+    return this.player;
+}
