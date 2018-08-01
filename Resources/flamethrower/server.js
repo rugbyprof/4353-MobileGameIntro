@@ -27,24 +27,35 @@ io.on('connection',function(socket){
             velocity: {
                 x:0,
                 y:0
+            },
+            target:{
+                x:0,
+                y:0
             }
         };
         socket.emit('allplayers',getAllPlayers());
         socket.broadcast.emit('newplayer',socket.player);
 
-        // socket.on('click',function(data){
-        //     //console.log('click to '+data.x+', '+data.y);
-        //     socket.player.x = data.x;
-        //     socket.player.y = data.y;
-        //     io.emit('move',socket.player);
-        // });
 
-        socket.on('velocity',function(data){
-            console.log("server velocity:")
-            console.log(data);
-            socket.player.velocity.x = data.x;
-            socket.player.velocity.y = data.y;
+        socket.on('moveme',function(data){
+            socket.player.x = data.location.x;
+            socket.player.y = data.location.y;
+            socket.player.velocity.x = data.velocity.x;
+            socket.player.velocity.y = data.velocity.y;
             io.emit('move',socket.player);
+        });
+
+        socket.on('snapTo',function(data){
+            socket.player.x = data.x;
+            socket.player.y = data.y;
+            io.emit('snapTo',socket.player);
+        });
+
+        socket.on('targetPlayer',function(data){
+            socket.player.target.x = data.x;
+            socket.player.target.y = data.y;
+            console.log(socket.player)
+            io.emit('fireWeapon',socket.player);
         });
 
         socket.on('disconnect',function(){

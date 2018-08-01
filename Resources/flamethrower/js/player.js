@@ -91,6 +91,8 @@ var Player = function (game, x, y, atlas, id) {
     this.createPlayer(x, y, atlas);
     this.healthBarConfig = this.createHealthBar();
     this.createHealthBar();
+
+    
     this.frames = 0; // temp
     this.id = id;
 };
@@ -135,6 +137,8 @@ Player.prototype.createPlayer = function (x, y, atlas) {
     // shrink body for better collision detection
     this.player.body.width = this.player.body.width * .8
     this.player.body.height = this.player.body.height * .8
+
+    this.initFireBallWeapon(5, 'fire_ball', 'fire_ball');
 
 }
 
@@ -259,7 +263,7 @@ Player.prototype.initFireBallWeapon = function (max_fireballs, animation_name, s
 
 Player.prototype.sendFireBall = function (x, y) {
 
-    var angle = Math.atan2(y - this.sprite.y, x - this.sprite.x) * 180 / Math.PI;
+    var angle = Math.atan2(y - this.player.y, x - this.player.x) * 180 / Math.PI;
 
     var xSpeed = 500 * Math.cos(angle * (Math.PI / 180));
     var ySpeed = 500 * Math.sin(angle * (Math.PI / 180));
@@ -267,13 +271,17 @@ Player.prototype.sendFireBall = function (x, y) {
     ball = this.fire_ball.getFirstExists(false);
 
     if (ball) {
-        ball.reset(this.sprite.x + 6, this.sprite.y - 8);
+        ball.reset(this.player.x + 6, this.player.y - 8);
         ball.angle = angle;
         ball.body.velocity.setTo(xSpeed, ySpeed);
         this.bulletTime = game.time.now + 150;
         ball.animations.play('fire');
     }
 };
+
+Player.prototype.resetFireBall = function (fireBall) {
+    fireBall.kill();
+}
 
 /**
  * Draw healthbar as configured
