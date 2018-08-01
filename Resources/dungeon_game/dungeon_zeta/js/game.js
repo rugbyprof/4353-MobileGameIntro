@@ -6,7 +6,7 @@ game.global = {
 	best_score: 0,
     level:1,
     backgroundColor:"#000000",
-    current_level: "level_01",
+    current_level: "level_02",
     levels : {}
 }
 

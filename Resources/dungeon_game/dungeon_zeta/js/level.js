@@ -69,7 +69,7 @@ Level.prototype.create = function () {
     this.player.bringToFront();
 
     // Spawn 7 ghosts when level loads
-    this.ghosts = new Ghosts(game, 7, this.player.x, this.player.y);
+    this.ghosts = new Ghosts(game, 1, this.player.x, this.player.y);
 
     // Track the ghosts on the mini map
     for (i = 0; i < this.ghosts.ghosts.length; i++) {

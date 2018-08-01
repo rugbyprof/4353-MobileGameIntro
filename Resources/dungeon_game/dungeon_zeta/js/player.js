@@ -134,9 +134,6 @@ Player.prototype.createPlayer = function (x, y, atlas) {
     this.player.body.width = this.player.body.width * .8
     this.player.body.height = this.player.body.height * .8
 
-    this.player.animations.play('attack_left')
-
-
 }
 
 /**
@@ -152,7 +149,7 @@ Player.prototype.registerAnimation = function (anim, sprite) {
     frame_rate = anim.rate; // frame rate
     loop = anim.loop; // repeate animation or play once
     this.playerAnimations[anim.key] = sprite.animations.add(key, Phaser.Animation.generateFrameNames(atlas_key, start, end), frame_rate, loop);
-    if(anim.key.includes("attack")){
+    if (anim.key.includes("attack")) {
         console.log("adding callback")
         this.playerAnimations[anim.key].onComplete.add(this.setNotBusy, this);
         console.log(this.playerAnimations[anim.key])
@@ -179,7 +176,7 @@ Player.prototype.move = function () {
                 this.player.animations.play('attack_right');
             }
         }
-        
+
         if (this.leftKey.isDown) {
             xv = -200;
         }
@@ -221,7 +218,7 @@ Player.prototype.move = function () {
             }
         }
 
-        if(!this.playerBusy){
+        if (!this.playerBusy) {
             this.player.animations.play(this.player.data['direction']);
         }
 
@@ -232,7 +229,7 @@ Player.prototype.move = function () {
         this.player.body.velocity.y = 0;
     }
     this.frames++
-        if (this.frames % 100 == 0) {
+        if (this.frames % 10 == 0) {
             this.player.health -= 1;
         }
     this.renderHealthBar();
@@ -338,7 +335,7 @@ Player.prototype.alias = function () {
     return this.player;
 }
 
-Player.prototype.setNotBusy = function(){
+Player.prototype.setNotBusy = function () {
     console.log("set not busy")
     this.playerBusy = false;
 }
