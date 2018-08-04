@@ -21,9 +21,9 @@ io.on('connection',function(socket){
 
     socket.on('newplayer',function(){
         socket.player = {
-            id: server.lastPlayerID++,
-            x: randomInt(100,400),
-            y: randomInt(100,400),
+            id: socket.id,
+            x: randomInt(50,1000),
+            y: randomInt(50,1000),
             velocity: {
                 x:0,
                 y:0
@@ -33,6 +33,7 @@ io.on('connection',function(socket){
                 y:0
             }
         };
+        console.log(socket.player);
         socket.emit('allplayers',getAllPlayers());
         socket.broadcast.emit('newplayer',socket.player);
 
@@ -54,7 +55,6 @@ io.on('connection',function(socket){
         socket.on('targetPlayer',function(data){
             socket.player.target.x = data.x;
             socket.player.target.y = data.y;
-            console.log(socket.player)
             io.emit('fireWeapon',socket.player);
         });
 

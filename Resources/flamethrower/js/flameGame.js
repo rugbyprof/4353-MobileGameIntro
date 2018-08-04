@@ -8,6 +8,7 @@ var FlameGame = {
 		console.log("FlameGame.js")
 		this.playerMap = {};
 		this.playerId = null;
+		this.moving = false;
 
 	},
 	create: function () {
@@ -50,24 +51,29 @@ var FlameGame = {
 
 			if (this.leftKey.isDown) {
 				velocity.x = -200;
+				this.moving = true;
 			}
 
 			if (this.rightKey.isDown) {
-				velocity.x = 200
+				velocity.x = 200;
+				this.moving = true;
 			}
 
 			if (this.upKey.isDown) {
 				velocity.y = -200;
+				this.moving = true;
 			}
 
 			if (this.downKey.isDown) {
 				velocity.y = 200;
+				this.moving = true;
 			}
 
 			if (!this.downKey.isDown && !this.upKey.isDown && !this.leftKey.isDown && !this.rightKey.isDown) {
-
-				Client.sendLocation(this.playerMap[this.playerId].alias.x, this.playerMap[this.playerId].alias.y);
-
+				if(this.moving === true){
+					Client.sendLocation(this.playerMap[this.playerId].alias.x, this.playerMap[this.playerId].alias.y);
+				}
+				this.moving = false;
 			}
 
 			Client.sendVelocity({
