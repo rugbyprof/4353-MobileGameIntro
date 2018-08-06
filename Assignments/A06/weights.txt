@@ -1,0 +1,13 @@
+2 Level 2.5
+	
+3 Portals or Transitions 6
+
+4 Coins 7.5		
+	
+4 Health 8		
+	
+4 HUD	5
+	
+5 Monsters 6
+
+6 Finish Line 7
