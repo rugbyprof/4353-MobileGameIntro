@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <style>
+    </style>
+</head>
+
+<body>
+
+</body>
+<script type="text/javascript" src="lesson_02/public/js/jquery/dist/jquery.js"></script>
+<script>
+    $.get("api.php", function (data) {
+        var ip = data.ip_address;
+        $('body').append("<ol>");
+        for(i=0;i<data.links.length;i++){
+            console.log(data.links[i])
+            var port = data.links[i].port;
+            var folder = data.links[i].folder_name;
+            var link = 'http://'+ip+':'+port
+            $('body').append("<li><a href='"+link+"'>"+folder+"</a></li>");
+        }
+        $('body').append("</ol>");
+    });
+</script>
+</html>

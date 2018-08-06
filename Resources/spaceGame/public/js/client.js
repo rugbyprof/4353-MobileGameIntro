@@ -5,6 +5,7 @@ Client.socket = io();
 console.log(Client.socket);
 
 Client.socket.on('currentPlayers', function (players) {
+
     console.log(Object.keys(players));
     Object.keys(players).forEach(function (id) {
         console.log(players[id])
@@ -14,6 +15,17 @@ Client.socket.on('currentPlayers', function (players) {
             SpaceGame.addOtherPlayers(players[id]);
         }
     });
+});
+
+Client.socket.on('gameReady', function () {
+    if(!SpaceGame.createRan){
+        SpaceGame.preload();
+        SpaceGame.create();
+    }
+});
+
+Client.socket.on('lostPlayer', function (playerInfo) {
+    SpaceGame.addOtherPlayers(playerInfo);
 });
 
 Client.socket.on('newPlayer', function (playerInfo) {

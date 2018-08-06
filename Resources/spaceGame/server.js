@@ -21,6 +21,7 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
     console.log('a user connected: ', socket.id);
+    socket.emit('gameReady');
     // create a new player and add it to our players object
     players[socket.id] = {
         rotation: 0,
@@ -29,6 +30,7 @@ io.on('connection', function (socket) {
         playerId: socket.id,
         team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
     };
+    
     // send the players object to the new player
     socket.emit('currentPlayers', players);
     // send the star object to the new player
@@ -53,6 +55,10 @@ io.on('connection', function (socket) {
         players[socket.id].rotation = movementData.rotation;
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
+    });
+
+    socket.on('requestPlayerInfo',function(playerId){
+        socket.emit('lostPlayer',players[socket.id]);
     });
 
     socket.on('starCollected', function () {

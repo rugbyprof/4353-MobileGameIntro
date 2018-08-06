@@ -1,0 +1,73 @@
+{
+    "frames": [{
+        "filename": "blue_portal1",
+        "frame": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+        },
+        "sourceSize": {
+            "w": 64,
+            "h": 64
+        }
+    }, {
+        "filename": "blue_portal2",
+        "frame": {
+            "x": 0,
+            "y": 65,
+            "w": 64,
+            "h": 64
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+        },
+        "sourceSize": {
+            "w": 64,
+            "h": 64
+        }
+    }, {
+        "filename": "blue_portal3",
+        "frame": {
+            "x": 65,
+            "y": 0,
+            "w": 64,
+            "h": 64
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+        },
+        "sourceSize": {
+            "w": 64,
+            "h": 64
+        }
+    }],
+    "meta": {
+        "app": "https://www.leshylabs.com/apps/sstool/",
+        "version": "Leshy SpriteSheet Tool v0.8.4",
+        "image": "blue_portal.png",
+        "size": {
+            "w": 129,
+            "h": 129
+        },
+        "scale": 1
+    }
+}

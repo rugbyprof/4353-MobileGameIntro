@@ -1,8 +1,13 @@
 var SpaceGame = {
+    createFunctionRan: false,
+    preloadFunctionRan: false,
+    init: function () {
+        game.stage.disableVisibilityChange = true;
+    },
 
-	init: function () {
-		game.stage.disableVisibilityChange = true;
-	},
+    gameReady: function () {
+        return this.preloadFunctionRan && this.createFunctionRan;
+    },
 
     preload: function () {
         console.log("preload")
@@ -12,8 +17,10 @@ var SpaceGame = {
     },
 
     create: function () {
+        console.log("create");
+        this.createRan = true;
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.otherPlayers = {};
+        game.global.otherPlayers = {};
 
         this.cursors = game.input.keyboard.createCursorKeys();
 
@@ -29,6 +36,11 @@ var SpaceGame = {
     },
 
     addPlayer: function (playerInfo) {
+        console.log("addPlayer");
+        if (!this.gameReady()) {
+            this.preload();
+            this.create();
+        }
         this.ship = game.add.sprite(playerInfo.x, playerInfo.y, 'ship');
         game.physics.arcade.enable(this.ship);
         this.ship.anchor.setTo(0.5, 0.5);
@@ -43,11 +55,11 @@ var SpaceGame = {
         this.ship.body.drag.set(50);
         // self.ship.setAngularDrag(100);
         this.ship.body.maxVelocity.set(300);
-        console.log(this.ship);
     },
 
     addOtherPlayers: function (playerInfo) {
-        if(typeof playerInfo == 'object' && typeof this.otherPlayers == 'object'){
+        console.log("addOtherPlayers");
+        if (typeof playerInfo == 'object' && typeof game.global.otherPlayers == 'object') {
             var otherPlayer = game.add.sprite(playerInfo.x, playerInfo.y, 'otherPlayer');
             game.physics.arcade.enable(otherPlayer);
             otherPlayer.anchor.setTo(0.5, 0.5)
@@ -62,7 +74,9 @@ var SpaceGame = {
             // self.ship.setAngularDrag(100);
             otherPlayer.body.maxVelocity.set(300);
             otherPlayer.playerId = playerInfo.playerId;
-            this.otherPlayers[playerInfo.playerId] = otherPlayer;
+            game.global.otherPlayers[playerInfo.playerId] = otherPlayer;
+            console.log("added player:")
+            console.log(game.global.otherPlayers);
         }
     },
 
@@ -88,8 +102,8 @@ var SpaceGame = {
             var x = this.ship.x;
             var y = this.ship.y;
             var r = this.ship.rotation;
-    
-            if (this.ship.oldPosition && (x !== this.ship.oldPosition.x || y !== this.ship.oldPosition.y || r !== this.ship.oldPosition.angle)) {
+
+            if (this.ship.oldPosition && (x !== this.ship.oldPosition.x || y !== this.ship.oldPosition.y || r !== this.ship.oldPosition.rotation)) {
                 Client.socket.emit('playerMovement', {
                     x: x,
                     y: y,
@@ -103,23 +117,27 @@ var SpaceGame = {
                 rotation: r
             };
             if (checkOverlap(this.star, this.ship)) {
-                console.log("contact");
                 Client.socket.emit('starCollected');
             }
         }
     },
     removePlayer: function (playerId) {
-        console.log(this.otherPlayers)
 
-        this.otherPlayers[playerId].destroy();
+        game.global.otherPlayers[playerId].destroy();
 
     },
 
     movePlayers: function (playerInfo) {
-
-        this.otherPlayers[playerInfo.playerId].angle = playerInfo.angle;
-        this.otherPlayers[playerInfo.playerId].x = playerInfo.x;
-        this.otherPlayers[playerInfo.playerId].y = playerInfo.y;
+        console.log(playerInfo);
+        console.log(game.global.otherPlayers);
+        if (!(playerInfo.playerId in game.global.otherPlayers)) {
+            console.log("requesting lost player...")
+            Client.socket.emit('requestPlayerInfo', playerInfo.playerId);
+            return;
+        }
+        game.global.otherPlayers[playerInfo.playerId].rotation = playerInfo.rotation;
+        game.global.otherPlayers[playerInfo.playerId].x = playerInfo.x;
+        game.global.otherPlayers[playerInfo.playerId].y = playerInfo.y;
 
     },
     updateScores: function (scores) {
