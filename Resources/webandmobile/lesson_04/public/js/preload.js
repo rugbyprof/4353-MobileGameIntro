@@ -1,7 +1,6 @@
 var preload = {
 	preload:function(){
 		console.log("preload.js");
-		console.log(game.globals);
 		game.stage.backgroundColor = game.globals.bg_color;
 
 		var loading_border = this.add.image(game.width/2,game.height/2,'loading_border')
@@ -10,9 +9,12 @@ var preload = {
 		loading.anchor.setTo(.5,.5)
 		this.load.setPreloadSprite(loading)
 		
+		
 		// game entities/world
 		game.load.image('pause', 'assets/images/pause.png')
 		game.load.image('space', 'assets/images/space.jpg')
+		game.load.image('bullet', 'assets/laserBlue02.png');
+		game.load.image('starfield', 'assets/images/starfield.png');
 
 		// Load all my new obstacles
 		for(i=0;i<game.globals.obstacle_icons.length;i++){
@@ -20,10 +22,10 @@ var preload = {
 			game.load.image('icon-'+name, 'assets/icon-'+name+'.png');
 		}
 
-		game.players[0].preLoad('ufoAtlas', 'assets/sprites/ufo-sheet_2.png', 'assets/sprites/ufo-atlas_2.json');
-
 		game.load.spritesheet('kaboom', 'assets/sprites/explode.png', 128, 128);
-		game.load.image('starfield', 'assets/images/starfield.png');
+		//game.load.spritesheet('earth', 'assets/sprites/Earth.png', 213,160,13);
+		game.load.spritesheet('earth', 'assets/sprites/Earth4.png', 85,85,48);
+		game.load.atlas('ufoAtlas','assets/sprites/ufo-sheet_2.png','assets/sprites/ufo-atlas_2.json');
 
 		// audio
 		game.load.audio('bg_spin', 'assets/sounds/spin_bg_music.mp3')
@@ -39,6 +41,6 @@ var preload = {
 	
 	create:function(){
 		
-		game.state.start('mainMenu')
+		game.state.start('mainMenu');
 	}
 }

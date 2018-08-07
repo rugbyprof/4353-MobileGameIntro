@@ -2,7 +2,7 @@ var mainMenu = {
 
 	create: function () {
 		console.log("mainmenu.js");
-		console.log(game.globals);
+		
 		// BG COLOR
 		game.stage.backgroundColor = game.globals.bg_color;
 		// Bg image
@@ -37,10 +37,8 @@ var mainMenu = {
 		game.input.onDown.add(this.listener)
 	},
 	listener: function () {
-		if(game.globals.score < 3){
-			game.state.start('play')
-		}else if(game.globals.score >= 3){
-			game.state.start('play2')
-		}
+	
+		game.state.start('destroyer')
+
 	}
 }

@@ -1,10 +1,9 @@
 
-
 function Ufo(game_copy) {
     var game = game_copy;
     this.laserSprites = {};
     this.laserAnimations = {};
-    this.atlasName;
+    this.atlasName=null;
     this.ship;
     this.xDirection = 0;
     this.yDirection = 0;
@@ -19,15 +18,12 @@ function Ufo(game_copy) {
     this.moveLeftKeys = [];
     this.moveRightKeys = [];
     this.fireKeys = [];
+    this.id = null;
 
-    this.preLoad = function (atlas_name, sprite_sheet, atlas_json) {
+    this.preLoad = function (atlas_name='ufoAtlas', sprite_sheet='assets/sprites/ufo-sheet_2.png', atlas_json='assets/sprites/ufo-atlas_2.json') {
         this.atlasName = atlas_name;
-        //https://www.joshmorony.com/how-to-create-animations-in-phaser-with-a-texture-atlas/
-        //https://www.leshylabs.com/apps/sstool/
-        //https://phaser.io/examples/v2/animation/animation-events
         game.load.atlas(this.atlasName, sprite_sheet, atlas_json);
-
-        game.load.image('bullet', 'assets/laserBlue02.png')
+        game.load.image('bullet', 'assets/laserBlue02.png');
     };
 
     /**
@@ -38,6 +34,11 @@ function Ufo(game_copy) {
      * @param {*} y_scale | scale factor for ship
      */
     this.create = function (x, y, x_scale, y_scale) {
+
+        if(this.atlasName == null){
+            this.preLoad();
+        }
+
         this.xScale = x_scale;
         this.yScale = y_scale;
         this.ship = game.add.sprite(x, y, this.atlasName);
@@ -121,21 +122,24 @@ function Ufo(game_copy) {
     };
 
     this.move = function(){
-    	    //////// Interacting with screen ///////////////
-		if (game.input.activePointer.isDown) {
+
+        // Grab some booleans based on keys being pressed
+        left = this._goLeft();
+        right = this._goRight();
+        up = this._goUp();
+        down = this._goDown();
+        fire = this._fireBullets();
+        tap = game.input.activePointer.isDown;
+
+    	// Left mouse is down or finger on screen
+		if (tap) {
 			this._move();
 		}else{
 			this._zeroAngle();
 		}
 
-        left = this._goLeft();
-        right = this._goRight();
-        up = this._goUp();
-        down = this._goDown();
-
-		// The left array is pressed 
+		// The left arrow is pressed 
 		if (left){
-            console.log("go left")
 			if(this.lastXdirection != this.xDirection){
 				this.xRate=0;
 			}
@@ -176,22 +180,25 @@ function Ufo(game_copy) {
 			this.yDirection = 1;
 		}else if(!up){
 			this.yRate=0; // key released
-		}
-
-
-
-		// Fire button was attached to space bar above
-		if (this._fireBullets())
+        }
+        
+		// Fire button down
+		if (fire)
 		{
 			this.fireBullets();
 		}
 
-		this.lastxdir = this.xdir;
-		this.lastydir = this.ydir;
+        // Remember last direction moved
+		this.lastXdirection = this.xDirection;
+		this.lastYdirection = this.yDirection;
 
-		this._move(this.xdir,this.xrate,this.ydir,this.yrate);
+        // Call private method with direction and rate of movement
+		this._move(this.xDirection,this.xRate,this.yDirection,this.yRate);
 
-		this._wrap();
+        // Wrap around the world (leave left show up right, leave bottom show up top, etc.)
+        this._wrap();
+        
+        Client.updateMe(this.ship.x,this.ship.y,this.ship.angle);
     }
 
     /**
@@ -199,12 +206,7 @@ function Ufo(game_copy) {
      * @returns {boolean}
      */
     this._goLeft = function(){
-        for(i=0;i<this.moveLeftKeys.length;i++){
-            if(this.moveLeftKeys[i].isDown){
-                return true;
-            }
-        }
-        return false;
+        return this.keyDown(this.moveLeftKeys);
     }
 
     /**
@@ -212,12 +214,7 @@ function Ufo(game_copy) {
      * @returns {boolean}
      */
     this._goRight = function(){
-        for(let i=0;i<this.moveRightKeys.length;i++){
-            if(this.moveRightKeys[i].isDown){
-                return true;
-            }
-        }
-        return false;
+        return this.keyDown(this.moveRightKeys);
     }
 
     /**
@@ -225,12 +222,7 @@ function Ufo(game_copy) {
      * @returns {boolean}
      */    
     this._goUp = function(){
-        for(let i=0;i<this.moveUpKeys.length;i++){
-            if(this.moveUpKeys[i].isDown){
-                return true;
-            }
-        }
-        return false;
+        return this.keyDown(this.moveUpKeys);
     }
 
     /**
@@ -238,12 +230,7 @@ function Ufo(game_copy) {
      * @returns {boolean}
      */
     this._goDown = function(){
-        for(let i=0;i<this.moveDownKeys.length;i++){
-            if(this.moveDownKeys[i].isDown){
-                return true;
-            }
-        }
-        return false;
+        return this.keyDown(this.moveDownKeys);
     }
 
 
@@ -252,8 +239,16 @@ function Ufo(game_copy) {
      * @returns {boolean}
      */
     this._fireBullets = function(){
-        for(let i=0;i<this.fireKeys;i++){
-            if(this.fireKeys[i].isDown){
+        return this.keyDown(this.fireKeys);
+    }
+
+    /**
+     * Check for key press in array of keys
+     * @returns {boolean}
+     */
+    this.keyDown = function(keyArray){
+        for(let i=0;i<keyArray.length;i++){
+            if(keyArray[i].isDown){
                 return true;
             }
         }

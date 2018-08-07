@@ -10,9 +10,38 @@ Client.sendTest = function () {
     Client.socket.emit('test');
 };
 
-// Client.askNewPlayer = function () {
-//     Client.socket.emit('newplayer');
-// };
+Client.sendNewPlayerRequest = function () {
+    console.log("sending request to join...");
+    Client.socket.emit('newPlayerJoining');
+};
+
+/**
+ * Assigns local player it's ID. This way it can update the array 
+ * of players and ignore itself.
+ * @param {string} pid | string unique hash
+ */
+Client.socket.on('playerID',function(pid){
+    destroyer.player.id = pid;
+    console.log('got my id');
+});
+
+/**
+ * @param {obj} data | object with socket id's as keys pointing to player data;
+ */
+Client.socket.on('playersArray', function (data) {
+    game.multiPlayersObj = {};
+    game.num_other_players = 0;
+    new_player_id = data.new_player_id;
+    players = data.players_obj;
+    Object.keys(players).forEach(function(pid){
+        game.multiPlayersObj[pid] = players[pid];
+        game.num_other_players++;
+    });
+    console.log(game.num_other_players);
+    console.log(game.multiPlayersObj);
+    destroyer.spawnNewPlayer(game.multiPlayersObj[new_player_id]);
+});
+
 
 // Client.sendVelocity = function (data) {
 //     Client.socket.emit('moveme', data);

@@ -1,7 +1,7 @@
 var boot = {
 	preload: function () {
 		console.log("boot.js")
-		console.log(game.globals);
+		
 		game.load.image('loading_border', 'assets/loading_border.png')
 		game.load.image('loading', 'assets/loading_interior.png')
 	},
