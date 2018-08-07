@@ -45,7 +45,7 @@ var gameOver = {
 	listener: function () {
 		game.sound.stopAll();
 		game.globals.score = 0;
-		game.state.start('play')
+		game.state.start('destroyer')
 	}
 
 }

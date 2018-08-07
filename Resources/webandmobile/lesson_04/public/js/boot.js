@@ -2,8 +2,8 @@ var boot = {
 	preload: function () {
 		console.log("boot.js")
 		
-		game.load.image('loading_border', 'assets/loading_border.png')
-		game.load.image('loading', 'assets/loading_interior.png')
+		game.load.image('loading_border', 'assets/images/loading_border.png')
+		game.load.image('loading', 'assets/images/loading_interior.png')
 	},
 	create: function () {
 
