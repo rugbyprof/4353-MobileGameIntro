@@ -1,0 +1,433 @@
+{
+    "frames": [{
+        "filename": "hover1",
+        "frame": {
+            "x": 76,
+            "y": 76,
+            "w": 57,
+            "h": 38
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 57,
+            "h": 38
+        },
+        "sourceSize": {
+            "w": 57,
+            "h": 38
+        }
+    }, {
+        "filename": "hover2",
+        "frame": {
+            "x": 7,
+            "y": 186,
+            "w": 56,
+            "h": 37
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 56,
+            "h": 37
+        },
+        "sourceSize": {
+            "w": 56,
+            "h": 37
+        }
+    }, {
+        "filename": "hover3",
+        "frame": {
+            "x": 76,
+            "y": 190,
+            "w": 59,
+            "h": 41
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 59,
+            "h": 41
+        },
+        "sourceSize": {
+            "w": 59,
+            "h": 41
+        }
+    }, {
+        "filename": "hover4",
+        "frame": {
+            "x": 76,
+            "y": 115,
+            "w": 58,
+            "h": 36
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 58,
+            "h": 36
+        },
+        "sourceSize": {
+            "w": 58,
+            "h": 36
+        }
+    }, {
+        "filename": "hover5",
+        "frame": {
+            "x": 9,
+            "y": 35,
+            "w": 56,
+            "h": 36
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 56,
+            "h": 36
+        },
+        "sourceSize": {
+            "w": 56,
+            "h": 36
+        }
+    }, {
+        "filename": "hover6",
+        "frame": {
+            "x": 7,
+            "y": 110,
+            "w": 58,
+            "h": 37
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 58,
+            "h": 37
+        },
+        "sourceSize": {
+            "w": 58,
+            "h": 37
+        }
+    }, {
+        "filename": "hover7",
+        "frame": {
+            "x": 9,
+            "y": 0,
+            "w": 57,
+            "h": 34
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 57,
+            "h": 34
+        },
+        "sourceSize": {
+            "w": 57,
+            "h": 34
+        }
+    }, {
+        "filename": "hover8",
+        "frame": {
+            "x": 76,
+            "y": 41,
+            "w": 59,
+            "h": 34
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 59,
+            "h": 34
+        },
+        "sourceSize": {
+            "w": 59,
+            "h": 34
+        }
+    }, {
+        "filename": "hover9",
+        "frame": {
+            "x": 7,
+            "y": 76,
+            "w": 57,
+            "h": 33
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 57,
+            "h": 33
+        },
+        "sourceSize": {
+            "w": 57,
+            "h": 33
+        }
+    }, {
+        "filename": "hover10",
+        "frame": {
+            "x": 76,
+            "y": 152,
+            "w": 57,
+            "h": 37
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 57,
+            "h": 37
+        },
+        "sourceSize": {
+            "w": 57,
+            "h": 37
+        }
+    }, {
+        "filename": "hover11",
+        "frame": {
+            "x": 7,
+            "y": 148,
+            "w": 56,
+            "h": 37
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 56,
+            "h": 37
+        },
+        "sourceSize": {
+            "w": 56,
+            "h": 37
+        }
+    }, {
+        "filename": "hover12",
+        "frame": {
+            "x": 76,
+            "y": 0,
+            "w": 60,
+            "h": 40
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 60,
+            "h": 40
+        },
+        "sourceSize": {
+            "w": 60,
+            "h": 40
+        }
+    }, {
+        "filename": "Laser1",
+        "frame": {
+            "x": 145,
+            "y": 0,
+            "w": 11,
+            "h": 37
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 11,
+            "h": 37
+        },
+        "sourceSize": {
+            "w": 11,
+            "h": 37
+        }
+    }, {
+        "filename": "Laser2",
+        "frame": {
+            "x": 0,
+            "y": 0,
+            "w": 8,
+            "h": 75
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 8,
+            "h": 75
+        },
+        "sourceSize": {
+            "w": 8,
+            "h": 75
+        }
+    }, {
+        "filename": "Laser3",
+        "frame": {
+            "x": 67,
+            "y": 0,
+            "w": 8,
+            "h": 85
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 8,
+            "h": 85
+        },
+        "sourceSize": {
+            "w": 8,
+            "h": 85
+        }
+    }, {
+        "filename": "Laser4",
+        "frame": {
+            "x": 145,
+            "y": 38,
+            "w": 7,
+            "h": 95
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 7,
+            "h": 95
+        },
+        "sourceSize": {
+            "w": 7,
+            "h": 95
+        }
+    }, {
+        "filename": "Laser5",
+        "frame": {
+            "x": 137,
+            "y": 106,
+            "w": 5,
+            "h": 99
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 5,
+            "h": 99
+        },
+        "sourceSize": {
+            "w": 5,
+            "h": 99
+        }
+    }, {
+        "filename": "Laser6",
+        "frame": {
+            "x": 0,
+            "y": 76,
+            "w": 6,
+            "h": 161
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 6,
+            "h": 161
+        },
+        "sourceSize": {
+            "w": 6,
+            "h": 161
+        }
+    }, {
+        "filename": "Laser7",
+        "frame": {
+            "x": 137,
+            "y": 0,
+            "w": 7,
+            "h": 105
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 7,
+            "h": 105
+        },
+        "sourceSize": {
+            "w": 7,
+            "h": 105
+        }
+    }, {
+        "filename": "Laser8",
+        "frame": {
+            "x": 67,
+            "y": 136,
+            "w": 8,
+            "h": 85
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 8,
+            "h": 85
+        },
+        "sourceSize": {
+            "w": 8,
+            "h": 85
+        }
+    }, {
+        "filename": "Laser9",
+        "frame": {
+            "x": 67,
+            "y": 86,
+            "w": 6,
+            "h": 49
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 6,
+            "h": 49
+        },
+        "sourceSize": {
+            "w": 6,
+            "h": 49
+        }
+    }],
+    "meta": {
+        "app": "https://www.leshylabs.com/apps/sstool/",
+        "version": "Leshy SpriteSheet Tool v0.8.4",
+        "image": "ufo-sheet.png",
+        "size": {
+            "w": 156,
+            "h": 237
+        },
+        "scale": 1
+    }
+}
