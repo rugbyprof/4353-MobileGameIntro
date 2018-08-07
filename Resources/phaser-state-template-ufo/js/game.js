@@ -11,6 +11,7 @@ game.ufo = new Ufo(game);
 console.log(game.ufo);
 
 game.global = {
+	game_title: "Ufo Scroller",
 	score: 0,
 	best_score: 0,
 	obstacle_id: 0,

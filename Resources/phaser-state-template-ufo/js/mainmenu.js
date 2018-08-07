@@ -12,7 +12,7 @@ var mainMenu = {
 
 		// Title
 		var logo = game.add.bitmapText(w / 2, -100, 'fontUsed', '', 75)
-		logo.text = GAMETITLE
+		logo.text = game.global.game_title;
 		logo.anchor.setTo(0.5, 0.5)
 		game.add.tween(logo).to({
 			y: h / 2 - 80
