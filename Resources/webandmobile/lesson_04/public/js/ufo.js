@@ -41,6 +41,8 @@ function Ufo(game_copy) {
         //     this.preLoad();
         // }
 
+        this.firingBullets = false; // Another flag to help with multiplayer
+
         this.prevX = x;
         this.prevY = y;
 
@@ -97,6 +99,7 @@ function Ufo(game_copy) {
         this.bullets.callAll('scale.setTo', 'scale', 0.3, 0.3);
         this.bullets.callAll('body.setSize', 'body', 5, 5);
         this.bullets.setAll('checkWorldBounds', true);
+        this.bullets.setAll('alpha', 1);
     };
 
     /**
@@ -364,20 +367,33 @@ function Ufo(game_copy) {
 
 
     this.fireBullets = function () {
-        // Get the first laser that's inactive, by passing 'false' as a parameter
+        // Get the first bullet that's inactive, by passing 'false' as a parameter
         var bullet = this.bullets.getFirstExists(false);
         if (bullet) {
+            this.firingBullets = true;
+            this.bullets.setAll('alpha', 1);
             // If we have a laser, set it to the starting position
             bullet.reset(this.ship.x, this.ship.y + 20);
             // Give it a velocity of -500 so it starts shooting
             bullet.body.velocity.y = 1000;
+            Client.fireBullets(game.multi.pid);
+        }else{
+            if(this.firingBullets){
+                Client.stopFireBullets(game.multi.pid);
+            }
+            this.firingBullets = false;
         }
+    };
+
+    this.stopFireBullets = function () {
+        this.bullets.setAll('alpha', 0);
     }
+
 
     this.resetBullets = function (bullet) {
         // Destroy the laser
         bullet.kill();
-    }
+    };
 
     this.dump = function () {
         console.log(this.ship);

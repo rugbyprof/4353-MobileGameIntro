@@ -7,6 +7,8 @@ var destroyer = {
 		console.log("destroyer.js");
 		console.log(game.multi.others);
 
+		this.movedFlag = false;	// Flag to assist with multiplayer resetting ufo position.
+
 		Client.sendNewPlayerRequest();
 
 		this.player = new Ufo(game);
@@ -113,21 +115,40 @@ var destroyer = {
 
 		// Spawn obstacles
 		if (frame_counter % spawn_rate == 0) {
-			//console.log(spawn_rate);
+			// console.log(spawn_rate);
 			choice = game.rnd.integerInRange(0, game.globals.obstacle_icons.length - 1);
 			name = game.globals.obstacle_icons[choice];
-			this.spawnObstacle(game.rnd.integerInRange(32, game.width - 32), game.height, speed = obstacle_speed, 0.5, 0.5, name);
-			Client.spawnObstacle(game.rnd.integerInRange(32, game.width - 32), game.height, speed = obstacle_speed, 0.5, 0.5, name);
+			x = game.rnd.integerInRange(32, game.width - 32);
+			y = game.height;
+			speed = obstacle_speed;
+			this.spawnObstacle(x, y, speed , 0.5, 0.5, name);
+			Client.spawnObstacle(x, y, speed , 0.5, 0.5, name);
 		}
 
 		this.player.move();
+
+		// Send your position to server to update
+		// your avatar on other screens
 		if (this.player.hasMoved()) {
+			this.movedFlag = true;
 			Client.sendPlayerPosition({
 				pid: game.multi.pid,
 				x: this.player.ship.x,
 				y: this.player.ship.y,
 				angle: this.player.ship.angle
 			});
+		}else{
+			if(this.movedFlag){
+				//Send one more position to flatten ufo out on 
+				//other screens.
+				Client.sendPlayerPosition({
+					pid: game.multi.pid,
+					x: this.player.ship.x,
+					y: this.player.ship.y,
+					angle: 0
+				});
+			}
+			this.movedFlag = false;
 		}
 		frame_counter++;
 		//}
@@ -148,6 +169,7 @@ var destroyer = {
 			game.multi.pid = player.pid;
 			game.multi.others[player.pid] = new Ufo(game);
 			game.multi.others[player.pid].create(player.x, player.y, 0.75, 0.75);
+			game.multi.others[player.pid].socket = player.sid;
 		}
 	},
 
@@ -244,6 +266,7 @@ var destroyer = {
 	 * Collision handler for a bullet and obstacle
 	 */
 	destroyItem: function (bullet, obstacle) {
+		//Client.destroyItem(obstacle.x,obstacle.y);
 		bullet.kill();
 		obstacle.kill();
 		var explosion = this.explosions.getFirstExists(false);

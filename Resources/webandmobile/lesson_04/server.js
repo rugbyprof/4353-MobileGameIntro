@@ -25,6 +25,10 @@ io.on('connection',function(socket){
             angle: 0
         };
 
+        // setTimeout(function(){
+        //     socket.broadcast.emit('spawnObstacle',data);
+        // }, 750);
+
         socket.on('updatePlayerPosition',function(data){
             if( typeof players[data.pid] == 'object'){
                 players[data.pid].x = data.x;
@@ -47,6 +51,12 @@ io.on('connection',function(socket){
             socket.broadcast.emit('fireBullets',pid);
         });
 
+        socket.on('stopFireBullets',function(pid){
+            socket.broadcast.emit('stopFireBullets',pid);
+        });
+
+        
+
         // Sends back our own socket id so we know who we are
         // in the list of players
         socket.emit('playerID',pid);
@@ -55,15 +65,25 @@ io.on('connection',function(socket){
         socket.broadcast.emit('playersArray', players);
 
         socket.on('disconnect',function(){
+            console.log("removing:" + socket.id)
+            socket.broadcast.emit('removePlayer',socket.id);
             io.emit('remove',socket.id);
-            delete players[socket.id];
+            Object.keys(players).forEach(function(pid){
+                if(players[pid].sid == socket.id){
+                    delete players[pid];
+                }
+            });
+            
         });
     });
 
     socket.on('test',function(){
         console.log('Server: test');
     });
+
+    
 });
+
 
 
 // Communicate between local page and app.js

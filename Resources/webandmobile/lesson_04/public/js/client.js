@@ -22,9 +22,15 @@ Client.sendPlayerRefresh = function () {
 };
 
 Client.fireBullets = function () {
+    console.log("fireing")
     Client.socket.emit('fireBullets',game.multi.pid);
 };
 
+
+Client.stopFireBullets = function () {
+    console.log("stopped fireing")
+    Client.socket.emit('stopFireBullets',game.multi.pid);
+};
 
 Client.spawnObstacle = function (x, y, speed, x_scale, y_scale,name){
     data = {
@@ -38,16 +44,38 @@ Client.spawnObstacle = function (x, y, speed, x_scale, y_scale,name){
     Client.socket.emit('spawnObstacle',data);
 };
 
+Client.socket.on('removePlayer', function(socketId){
+    console.log(game.multi.others);
+    Object.keys(game.multi.others).forEach(function(pid){
+        if(game.multi.others[pid].socket == socketId){
+            game.multi.others[pid].ship.alpha = 0;
+            game.multi.others[pid].ship.destroy();
+            delete game.multi.others[pid];
+        }
+    });
+    console.log(game.multi.others);
+});
+
 Client.socket.on('spawnObstacle', function(data){
-    destroyer.spawnObstacle(data.x,data.y,data.speed,data.x_scale,data.y_scale,data.name);
+    x = data.x;
+    y = data.y;
+    x_scale = data.x_scale;
+    y_scale = data.y_scale;
+    speed = data.speed;
+    name = data.name;
+    destroyer.spawnObstacle(x,y,data.speed,x_scale,y_scale,name);
 });
 
 Client.socket.on('fireBullets', function(pid){
     console.log("firebullets")
-    console.log(destroyer.player);
-    if(pid != game.multi.pid){
-        destroyer.player.fireBullets();
-    }
+    console.log(pid);
+    game.multi.others[pid].fireBullets();
+});
+
+Client.socket.on('stopFireBullets', function(pid){
+    console.log("stopfirebullets")
+    console.log(pid);
+    game.multi.others[pid].stopFireBullets();
 });
 
 Client.socket.on('playerCount', function(count){
@@ -79,6 +107,10 @@ Client.socket.on('playersArray', function (players) {
         }
     });
 });
+
+function randomInt(min=0,max=9007199254740992){
+    return Math.floor(max * Math.random()) + min;
+}
 
 
 // Client.sendVelocity = function (data) {
