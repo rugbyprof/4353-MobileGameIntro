@@ -12,9 +12,10 @@ Github Username: _____________________
 | -       | `A07` folder exists in `assignments`                             |         |        |
 | -       | Code is commented                                                |         |        |
 |         |                                                                  |         |        |
-| ***2*** | ***Multiplayer***                                                | **0**   |        |
-| -       | TBD                                                              | 0       |        |
-| -       |                                                                  | 0       |        |
+| ***2*** | ***Two Players***                                                | **0**   |        |
+| -       | 2 Players implemented.                                           | 0       |        |
+| -       | Left Player uses keys W,A,S,D to move and SHIFT to fire          | 0       |        |
+| -       | Right Player uses ARROWS to move and SPACE to fire               | 0       |        |
 |         |                                                                  |         |        |
 | ***3*** | ***Target for Shooting***                                        | **0**   |        |
 | -       | Place a target retical sprite in the bottom left/right/or both.  | 0       |        |
