@@ -1,10 +1,21 @@
 var destroyer = {
+	init: function(){
+		game.stage.disableVisibilityChange = true;
+	},
+
 	create: function () {
-		console.log("play.js");
+		console.log("destroyer.js");
+		console.log(game.others);
 
 		Client.sendNewPlayerRequest();
 
 		this.player = new Ufo(game);
+		this.pid = null;
+
+		// erase the others?
+		if(game.others != 'object'){
+			game.others = {};
+		}
 
 		w = game.width // Game width and height for convenience
 		h = game.height
@@ -44,7 +55,7 @@ var destroyer = {
 
 		// Player
 		//calls the create method of the ufo object
-		this.player.create(randomInt(0,game.width), randomInt(0,game.height/2), 0.75, 0.75); 
+		this.player.create(randomInt(game.width / 4, game.width / 2), randomInt(100, game.height / 2), 0.75, 0.75);
 
 
 		// Score label
@@ -73,52 +84,94 @@ var destroyer = {
 
 		//if (game.num_other_players > 0) {
 
-			// Place score on game screen
-			this.bmpText.text = game.globals.score
+		// Place score on game screen
+		this.bmpText.text = game.globals.score
 
-			// Move background to look like space is moving
-			this.starfield.tilePosition.y -= 2;
+		// Move background to look like space is moving
+		this.starfield.tilePosition.y -= 2;
 
-			// Check for overlap between game ship and obstacles
-			game.physics.arcade.overlap(this.player.ship, this.obstacles, this.killPlayer, null, this)
+		// Check for overlap between game ship and obstacles
+		game.physics.arcade.overlap(this.player.ship, this.obstacles, this.killPlayer, null, this)
 
-			// Check for overlap between bullets and obstacles
-			game.physics.arcade.overlap(this.player.bullets, this.obstacles, this.destroyItem, null, this);
+		// Check for overlap between bullets and obstacles
+		game.physics.arcade.overlap(this.player.bullets, this.obstacles, this.destroyItem, null, this);
 
-			if (this.item_destroyed) {
-				// Check to see if we score any points
-				// needs changed since we added bullets
-				game.globals.score += this.scorePoint();
-				this.item_destroyed = false;
-			}
+		if (this.item_destroyed) {
+			// Check to see if we score any points
+			// needs changed since we added bullets
+			game.globals.score += this.scorePoint();
+			this.item_destroyed = false;
+		}
 
-			spawn_rate = 100 - game.globals.score; // how fast to add new obstacles to screen (smaller value = more obstacles)
-			obstacle_speed = game.globals.score * 1.5 + 200; // how fast should each obstacle move
+		spawn_rate = 100 - game.globals.score; // how fast to add new obstacles to screen (smaller value = more obstacles)
+		obstacle_speed = game.globals.score * 1.5 + 200; // how fast should each obstacle move
 
-			// Spawn rate continuously shrinks so stop it at 5
-			if (spawn_rate < 5) {
-				spawn_rate = 5;
-			}
+		// Spawn rate continuously shrinks so stop it at 5
+		if (spawn_rate < 5) {
+			spawn_rate = 5;
+		}
 
-			// Spawn obstacles
-			if (frame_counter % spawn_rate == 0) {
-				//console.log(spawn_rate);
-				//console.log(obstacle_speed);
-				this.spawnObstacle(game.rnd.integerInRange(32, game.width - 32), game.height, speed = obstacle_speed, 0.5, 0.5)
-			}
+		// Spawn obstacles
+		if (frame_counter % spawn_rate == 0) {
+			//console.log(spawn_rate);
+			//console.log(obstacle_speed);
+			this.spawnObstacle(game.rnd.integerInRange(32, game.width - 32), game.height, speed = obstacle_speed, 0.5, 0.5)
+		}
 
-			this.player.move();
+		this.player.move();
+		if (this.player.hasMoved()) {
+			Client.sendPlayerPosition({
+				pid: this.pid,
+				x: this.player.ship.x,
+				y: this.player.ship.y,
+				angle: this.player.ship.angle
+			});
+		}
+		
 
-			frame_counter++;
+		frame_counter++;
 		//}
 	},
 
+	render: function(){
+		
+	},
+
 	/**
-	 * Spawn New Player
+	 * Spawn New Player if its not the local player
 	 */
 	spawnNewPlayer: function (player) {
-		game.players.push(new Ufo(game));
-		game.players[game.players.length-1].create(player.x,player.y,0.75,0.75);
+		console.log("Destroyer: spawnNewPlayer")
+		console.log(player);
+		if(typeof game.others != 'object'){
+			game.others = {};
+		}
+		if (typeof player == 'object') {
+			this.pid = player.pid;
+			game.others[player.pid] = new Ufo(game);
+			game.others[player.pid].create(player.x, player.y, 0.75, 0.75);
+		}
+		console.log(game.others);
+	},
+
+	moveOtherPlayers: function(player){
+		console.log("destroyer: moveOtherPlayers");
+		console.log(game.others);
+		if(typeof game.others == 'object'){
+			if(typeof game.others[player.pid] == 'object'){
+				game.others[player.pid].ship.x = player.x
+				game.others[player.pid].ship.y = player.y;
+				game.others[player.pid].ship.angle = player.angle;
+			}
+		}
+	},
+
+	checkPlayerCount: function(count){
+		console.log(count);
+		console.log(game.others.length);
+		if(game.others.length != count){
+			Client.sendPlayerRefresh();
+		}
 	},
 
 	/**
@@ -187,8 +240,8 @@ var destroyer = {
 		//issues with this
 		//game.plugins.screenShake.shake(20);
 		this.sound.kill.play('', 0, 0.5, false)
-		player.kill();
-		game.state.start('gameOver');
+		//player.kill();
+		//game.state.start('gameOver');
 	},
 	/**
 	 * Source: https://phaser.io/examples/v2/games/invaders

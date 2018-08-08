@@ -40,7 +40,6 @@ var preload = {
 	},
 	
 	create:function(){
-		
 		game.state.start('mainMenu');
 	}
 }

@@ -15,32 +15,50 @@ server.lastPlayerID = 0;
 var players = {};
 
 io.on('connection',function(socket){
-
+    console.log('Server: connection');
     socket.on('newPlayerJoining',function(){
-        console.log(socket.id);
-        players[socket.id] = {
+        console.log('Server: connection' + socket.id);
+        pid = server.lastPlayerID++;
+        players[pid] = {
             sid: socket.id,
-            pid: server.lastPlayerID++,
-            x: randomInt(0,1000),
-            y: randomInt(0,1000)
+            pid: pid,
+            x: randomInt(300,800),
+            y: randomInt(300,800),
+            angle: 0
         };
+
+        socket.on('updatePlayerPosition',function(data){
+            console.log('Server: Updateplayerposition')
+            if( typeof players[data.pid] == 'object'){
+                players[data.pid].x = data.x;
+                players[data.pid].y = data.y;
+                players[data.pid].angle = data.angle;
+                socket.broadcast.emit('playerMoved', data);
+            }
+            socket.emit('playerCount',server.lastPlayerID);
+        });
+
+        socket.on('requestPlayers',function(){
+            console.log('Server: requestPlayers');
+            socket.emit('playersArray',players);
+        });
 
         // Sends back our own socket id so we know who we are
         // in the list of players
-        socket.emit('playerID',socket.id);
-
+        socket.emit('playerID',pid);
+        socket.emit('playersArray', players);
         // Sends object of players + new players id so we know who to spawn
-        socket.broadcast.emit('playersArray', {players_obj:players,new_player_id:socket.id});
+        socket.broadcast.emit('playersArray', players);
 
         socket.on('disconnect',function(){
-            console.log(socket.id + ' disconnecting...')
+            console.log('Server: disconnect' + socket.id);
             io.emit('remove',socket.id);
             delete players[socket.id];
         });
     });
 
     socket.on('test',function(){
-        console.log('test received');
+        console.log('Server: test');
     });
 });
 
@@ -70,6 +88,10 @@ io.on('connection',function(socket){
 //         console.log('test received');
 //     });
 // });
+
+function randomInt(min=0,max=9007199254740992){
+    return Math.floor(max * Math.random()) + min;
+}
 
 function getAllPlayers(){
     var players = {};

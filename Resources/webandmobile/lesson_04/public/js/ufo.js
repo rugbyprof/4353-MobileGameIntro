@@ -3,7 +3,7 @@ function Ufo(game_copy) {
     var game = game_copy;
     this.laserSprites = {};
     this.laserAnimations = {};
-    this.atlasName=null;
+    this.atlasName='ufoAtlas';
     this.ship;
     this.xDirection = 0;
     this.yDirection = 0;
@@ -19,12 +19,14 @@ function Ufo(game_copy) {
     this.moveRightKeys = [];
     this.fireKeys = [];
     this.id = null;
+    this.prevX=0;
+    this.prevY=0;
 
-    this.preLoad = function (atlas_name='ufoAtlas', sprite_sheet='assets/sprites/ufo-sheet_2.png', atlas_json='assets/sprites/ufo-atlas_2.json') {
-        this.atlasName = atlas_name;
-        game.load.atlas(this.atlasName, sprite_sheet, atlas_json);
-        game.load.image('bullet', 'assets/laserBlue02.png');
-    };
+    // this.preLoad = function (atlas_name='ufoAtlas', sprite_sheet='assets/sprites/ufo-sheet_2.png', atlas_json='assets/sprites/ufo-atlas_2.json') {
+    //     this.atlasName = atlas_name;
+    //     game.load.atlas(this.atlasName, sprite_sheet, atlas_json);
+    //     game.load.image('bullet', 'assets/laserBlue02.png');
+    // };
 
     /**
      * 
@@ -35,9 +37,12 @@ function Ufo(game_copy) {
      */
     this.create = function (x, y, x_scale, y_scale) {
 
-        if(this.atlasName == null){
-            this.preLoad();
-        }
+        // if(this.atlasName == null){
+        //     this.preLoad();
+        // }
+
+        this.prevX = x;
+        this.prevY = y;
 
         this.xScale = x_scale;
         this.yScale = y_scale;
@@ -51,6 +56,8 @@ function Ufo(game_copy) {
         this.ship.scale.setTo(this.xScale, this.yScale);
         this.ship.anchor.setTo(.5, .5);
         this.ship.body.setSize(this.ship.width - 10, this.ship.height);
+        this.ship.alpha = 1;
+        this.ship.bringToTop();
 
 
         this.laserSprites['laser'] = game.add.sprite(0, 0, this.atlasName);
@@ -119,6 +126,11 @@ function Ufo(game_copy) {
 
     this.assignFireKeys = function(key){
         this.fireKeys.push(game.input.keyboard.addKey(key));
+    };
+
+
+    this.hasMoved = function(){
+        return (this.prevX != this.ship.x || this.prevY != this.ship.y);
     };
 
     this.move = function(){
@@ -264,6 +276,9 @@ function Ufo(game_copy) {
      */
     this._move = function (xd = 0, xr = 0, yd = 0, yr = 0) {
 
+        this.prevX = this.ship.x;
+        this.prevY = this.ship.y;
+
         var angle = 0;
         if (xd == 0 && xr == 0 && yd == 0 && yr == 0 && game.input.activePointer.leftButton.isDown) {
             ratex = this.movexSpeed(game.input.x, game.width);
@@ -274,7 +289,6 @@ function Ufo(game_copy) {
         }
 
         angle = this.moveAngle(ratex, 3);
-
 
         this.ship.x += ratex;
         this.ship.y += ratey;

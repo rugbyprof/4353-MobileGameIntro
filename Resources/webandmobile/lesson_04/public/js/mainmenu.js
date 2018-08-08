@@ -35,10 +35,12 @@ var mainMenu = {
 
 		// touch input
 		game.input.onDown.add(this.listener)
+
+
 	},
 	listener: function () {
 	
-		game.state.start('destroyer')
+		game.state.start('destroyer');
 
 	}
 }
