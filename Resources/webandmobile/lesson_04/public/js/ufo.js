@@ -197,6 +197,8 @@ function Ufo(game_copy) {
 		// Fire button down
 		if (fire)
 		{
+            Client.fireBullets();
+            console.log('ufo fire')
 			this.fireBullets();
 		}
 
@@ -370,7 +372,6 @@ function Ufo(game_copy) {
             // Give it a velocity of -500 so it starts shooting
             bullet.body.velocity.y = 1000;
         }
-
     }
 
     this.resetBullets = function (bullet) {

@@ -6,28 +6,53 @@ var Client = {};
 Client.socket = io.connect();
 
 Client.sendTest = function () {
-    console.log('Client: sendTest');
     Client.socket.emit('test');
 };
 
 Client.sendNewPlayerRequest = function () {
-    console.log('Client: sendNewPlayerRequest');
     Client.socket.emit('newPlayerJoining');
 };
 
 Client.sendPlayerPosition = function (data) {
-    console.log('Client: sendPlayerPosition');
     Client.socket.emit('updatePlayerPosition',data);
 };
 
 Client.sendPlayerRefresh = function () {
-    console.log('Client: sendPlayerRefresh');
     Client.socket.emit('requestPlayers');
 };
 
-Client.socket.on('playerCount') = function(count){
+Client.fireBullets = function () {
+    Client.socket.emit('fireBullets',game.multi.pid);
+};
+
+
+Client.spawnObstacle = function (x, y, speed, x_scale, y_scale,name){
+    data = {
+        x:x,
+        y:y,
+        speed:speed,
+        x_scale:x_scale,
+        y_scale:y_scale,
+        name
+    }
+    Client.socket.emit('spawnObstacle',data);
+};
+
+Client.socket.on('spawnObstacle', function(data){
+    destroyer.spawnObstacle(data.x,data.y,data.speed,data.x_scale,data.y_scale,data.name);
+});
+
+Client.socket.on('fireBullets', function(pid){
+    console.log("firebullets")
+    console.log(destroyer.player);
+    if(pid != game.multi.pid){
+        destroyer.player.fireBullets();
+    }
+});
+
+Client.socket.on('playerCount', function(count){
     destroyer.checkPlayerCount(count);
-}
+});
 
 /**
  * Assigns local player it's ID. This way it can update the array 
@@ -35,13 +60,10 @@ Client.socket.on('playerCount') = function(count){
  * @param {string} pid | string unique hash
  */
 Client.socket.on('playerID',function(pid){
-    console.log('Client: playerID');
     game.multi.pid = pid;
-    console.log('got my id:' + pid);
 });
 
 Client.socket.on('playerMoved',function(data){
-    console.log('Client: playerMoved');
     destroyer.moveOtherPlayers(data);
 });
 
@@ -49,11 +71,9 @@ Client.socket.on('playerMoved',function(data){
  * @param {obj} data | object with socket id's as keys pointing to player data;
  */
 Client.socket.on('playersArray', function (players) {
-    console.log('Client: playersArray');
     Object.keys(players).forEach(function(pid){
-        if(pid != game.multi.pid && !(pid in game.multi.players)){
-            console.log("spawning a player..." + pid)
-            game.multi.players[pid] = players[pid];
+        if(pid != game.multi.pid && !(pid in game.multi.others)){
+            game.multi.others[pid] = players[pid];
             game.multi.count++;
             destroyer.spawnNewPlayer(players[pid]);
         }

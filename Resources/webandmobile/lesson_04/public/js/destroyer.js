@@ -1,20 +1,20 @@
 var destroyer = {
-	init: function(){
+	init: function () {
 		game.stage.disableVisibilityChange = true;
 	},
 
 	create: function () {
 		console.log("destroyer.js");
-		console.log(game.others);
+		console.log(game.multi.others);
 
 		Client.sendNewPlayerRequest();
 
 		this.player = new Ufo(game);
-		this.pid = null;
+		game.multi.pid = null;
 
 		// erase the others?
-		if(game.others != 'object'){
-			game.others = {};
+		if (game.multi.others != 'object') {
+			game.multi.others = {};
 		}
 
 		w = game.width // Game width and height for convenience
@@ -114,63 +114,59 @@ var destroyer = {
 		// Spawn obstacles
 		if (frame_counter % spawn_rate == 0) {
 			//console.log(spawn_rate);
-			//console.log(obstacle_speed);
-			this.spawnObstacle(game.rnd.integerInRange(32, game.width - 32), game.height, speed = obstacle_speed, 0.5, 0.5)
+			choice = game.rnd.integerInRange(0, game.globals.obstacle_icons.length - 1);
+			name = game.globals.obstacle_icons[choice];
+			this.spawnObstacle(game.rnd.integerInRange(32, game.width - 32), game.height, speed = obstacle_speed, 0.5, 0.5, name);
+			Client.spawnObstacle(game.rnd.integerInRange(32, game.width - 32), game.height, speed = obstacle_speed, 0.5, 0.5, name);
 		}
 
 		this.player.move();
 		if (this.player.hasMoved()) {
 			Client.sendPlayerPosition({
-				pid: this.pid,
+				pid: game.multi.pid,
 				x: this.player.ship.x,
 				y: this.player.ship.y,
 				angle: this.player.ship.angle
 			});
 		}
-		
-
 		frame_counter++;
 		//}
 	},
 
-	render: function(){
-		
+	render: function () {
+
 	},
 
 	/**
 	 * Spawn New Player if its not the local player
 	 */
 	spawnNewPlayer: function (player) {
-		console.log("Destroyer: spawnNewPlayer")
-		console.log(player);
-		if(typeof game.others != 'object'){
-			game.others = {};
+		if (typeof game.multi.others != 'object') {
+			game.multi.others = {};
 		}
 		if (typeof player == 'object') {
-			this.pid = player.pid;
-			game.others[player.pid] = new Ufo(game);
-			game.others[player.pid].create(player.x, player.y, 0.75, 0.75);
+			game.multi.pid = player.pid;
+			game.multi.others[player.pid] = new Ufo(game);
+			game.multi.others[player.pid].create(player.x, player.y, 0.75, 0.75);
 		}
-		console.log(game.others);
 	},
 
-	moveOtherPlayers: function(player){
-		console.log("destroyer: moveOtherPlayers");
-		console.log(game.others);
-		if(typeof game.others == 'object'){
-			if(typeof game.others[player.pid] == 'object'){
-				game.others[player.pid].ship.x = player.x
-				game.others[player.pid].ship.y = player.y;
-				game.others[player.pid].ship.angle = player.angle;
+	moveOtherPlayers: function (player) {
+		if (typeof game.multi.others == 'object') {
+			if (typeof game.multi.others[player.pid] == 'object') {
+				game.multi.others[player.pid].ship.x = player.x
+				game.multi.others[player.pid].ship.y = player.y;
+				game.multi.others[player.pid].ship.angle = player.angle;
 			}
 		}
 	},
 
-	checkPlayerCount: function(count){
-		console.log(count);
-		console.log(game.others.length);
-		if(game.others.length != count){
-			Client.sendPlayerRefresh();
+	checkPlayerCount: function (count) {
+
+		if (typeof game.multi.others == 'object') {
+			if (game.multi.others.length < count - 1) {
+				Client.sendPlayerRefresh();
+			}
 		}
 	},
 
@@ -181,31 +177,30 @@ var destroyer = {
 	 * @param y : y coord
 	 * @param speed : speed to move across game board
 	 */
-	spawnObstacle: function (x, y, speed, x_scale, y_scale) {
-		// randomly choose an icon from an array of icon names
-		var choice = game.rnd.integerInRange(0, game.globals.obstacle_icons.length - 1);
-		var name = game.globals.obstacle_icons[choice];
+	spawnObstacle: function (x, y, speed, x_scale, y_scale, name) {
 
-		//create the obstacle with its randomly chosen name
-		var obstacle = this.obstacles.create(x, y, 'icon-' + name)
-		game.debug.body(obstacle);
+		if (typeof this.obstacles == 'object') {
+			//create the obstacle with its randomly chosen name
+			var obstacle = this.obstacles.create(x, y, 'icon-' + name)
+			//game.debug.body(obstacle);
 
-		game.physics.enable(obstacle, Phaser.Physics.ARCADE)
+			game.physics.enable(obstacle, Phaser.Physics.ARCADE)
 
-		obstacle.enableBody = true
-		obstacle.body.colliderWorldBounds = true
-		obstacle.body.immovable = true
-		obstacle.anchor.setTo(.5, .5)
-		obstacle.scale.setTo(x_scale, y_scale)
-		obstacle.body.setSize(obstacle.width + 20, obstacle.height - 20);
-		obstacle.body.velocity.y = -speed
+			obstacle.enableBody = true
+			obstacle.body.colliderWorldBounds = true
+			obstacle.body.immovable = true
+			obstacle.anchor.setTo(.5, .5)
+			obstacle.scale.setTo(x_scale, y_scale)
+			obstacle.body.setSize(obstacle.width + 20, obstacle.height - 20);
+			obstacle.body.velocity.y = -speed
 
-		obstacle.checkWorldBounds = true;
+			obstacle.checkWorldBounds = true;
 
-		// Kill obstacle/enemy if vertically out of bounds
-		obstacle.events.onOutOfBounds.add(this.killObstacle, this);
+			// Kill obstacle/enemy if vertically out of bounds
+			obstacle.events.onOutOfBounds.add(this.killObstacle, this);
 
-		obstacle.outOfBoundsKill = true;
+			obstacle.outOfBoundsKill = true;
+		}
 	},
 
 	/**
@@ -291,5 +286,13 @@ var destroyer = {
 					pause_watermark.destroy()
 				}
 			}, self)
+	},
+	objectSize: function (obj) {
+		var size = 0,
+			key;
+		for (key in obj) {
+			if (obj.hasOwnProperty(key)) size++;
+		}
+		return size;
 	}
 }

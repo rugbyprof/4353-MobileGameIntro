@@ -15,9 +15,7 @@ server.lastPlayerID = 0;
 var players = {};
 
 io.on('connection',function(socket){
-    console.log('Server: connection');
     socket.on('newPlayerJoining',function(){
-        console.log('Server: connection' + socket.id);
         pid = server.lastPlayerID++;
         players[pid] = {
             sid: socket.id,
@@ -28,7 +26,6 @@ io.on('connection',function(socket){
         };
 
         socket.on('updatePlayerPosition',function(data){
-            console.log('Server: Updateplayerposition')
             if( typeof players[data.pid] == 'object'){
                 players[data.pid].x = data.x;
                 players[data.pid].y = data.y;
@@ -39,8 +36,15 @@ io.on('connection',function(socket){
         });
 
         socket.on('requestPlayers',function(){
-            console.log('Server: requestPlayers');
             socket.emit('playersArray',players);
+        });
+
+        socket.on('spawnObstacle',function(data){
+            socket.broadcast.emit('spawnObstacle',data);
+        });
+        
+        socket.on('fireBullets',function(pid){
+            socket.broadcast.emit('fireBullets',pid);
         });
 
         // Sends back our own socket id so we know who we are
@@ -51,7 +55,6 @@ io.on('connection',function(socket){
         socket.broadcast.emit('playersArray', players);
 
         socket.on('disconnect',function(){
-            console.log('Server: disconnect' + socket.id);
             io.emit('remove',socket.id);
             delete players[socket.id];
         });

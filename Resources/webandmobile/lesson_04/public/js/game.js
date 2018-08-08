@@ -16,7 +16,7 @@ var config = {
 var game = new Phaser.Game(config.max_width, config.max_height, Phaser.Canvas, "game");
 
 game.multi = {
-	players: {},
+	others: {},
 	count: 0,
 	pid: null
 }
@@ -40,3 +40,4 @@ function random(n) {
 function randomInt(min = 0, max = 9007199254740992) {
 	return Math.floor(max * Math.random()) + min;
 }
+
