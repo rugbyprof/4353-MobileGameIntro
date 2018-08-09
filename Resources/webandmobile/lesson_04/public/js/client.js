@@ -22,13 +22,11 @@ Client.sendPlayerRefresh = function () {
 };
 
 Client.fireBullets = function () {
-    console.log("fireing")
     Client.socket.emit('fireBullets',game.multi.pid);
 };
 
 
 Client.stopFireBullets = function () {
-    console.log("stopped fireing")
     Client.socket.emit('stopFireBullets',game.multi.pid);
 };
 
@@ -45,7 +43,6 @@ Client.spawnObstacle = function (x, y, speed, x_scale, y_scale,name){
 };
 
 Client.socket.on('removePlayer', function(socketId){
-    console.log(game.multi.others);
     Object.keys(game.multi.others).forEach(function(pid){
         if(game.multi.others[pid].socket == socketId){
             game.multi.others[pid].ship.alpha = 0;
@@ -53,7 +50,6 @@ Client.socket.on('removePlayer', function(socketId){
             delete game.multi.others[pid];
         }
     });
-    console.log(game.multi.others);
 });
 
 Client.socket.on('spawnObstacle', function(data){
@@ -67,14 +63,10 @@ Client.socket.on('spawnObstacle', function(data){
 });
 
 Client.socket.on('fireBullets', function(pid){
-    console.log("firebullets")
-    console.log(pid);
     game.multi.others[pid].fireBullets();
 });
 
 Client.socket.on('stopFireBullets', function(pid){
-    console.log("stopfirebullets")
-    console.log(pid);
     game.multi.others[pid].stopFireBullets();
 });
 

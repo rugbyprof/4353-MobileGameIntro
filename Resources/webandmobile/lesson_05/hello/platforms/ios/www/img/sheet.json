@@ -1,0 +1,40 @@
+{
+    "frames": [
+        {
+            "filename": "background.png",
+            "frame": {
+                "x": 0,
+                "y": 355,
+                "w": 800,
+                "h": 480
+            }
+        },
+        {
+            "filename": "planeBlue1.png",
+            "frame": {
+                "x": 330,
+                "y": 1371,
+                "w": 88,
+                "h": 73
+            }
+        },
+        {
+            "filename": "planeBlue2.png",
+            "frame": {
+                "x": 372,
+                "y": 1132,
+                "w": 88,
+                "h": 73
+            }
+        },
+        {
+            "filename": "planeBlue3.png",
+            "frame": {
+                "x": 222,
+                "y": 1562,
+                "w": 88,
+                "h": 73
+            }
+        }
+    ]
+}
